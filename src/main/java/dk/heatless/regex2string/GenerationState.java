@@ -58,7 +58,16 @@ public class GenerationState {
 	public String getGenerated(){
 		return getGeneratedWithPrevious(new ArrayList<String>());
 	}
-
+	
+	public int getLengthOfGenerated(){
+		if(previous == null){
+			//root
+			return 0;
+		}else{
+			return generatedString.length() + previous.getLengthOfGenerated();
+		}
+	}
+	
 	public GenerationState getPrevious(){
 		return this.previous;
 	}

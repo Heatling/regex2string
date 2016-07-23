@@ -11,6 +11,15 @@ public class Rule {
 
 //Constructors
 	public Rule(Condition precondition, Condition postcondition, Generator generator) {
+		if(precondition == null){
+			throw new IllegalArgumentException("Precondition was null");
+		}
+		if(postcondition == null){
+			throw new IllegalArgumentException("Postcondition was null");
+		}
+		if(generator == null){
+			throw new IllegalArgumentException("Generator was null");
+		}
 		
 		this.precondition = precondition;
 		this.postcondition = postcondition;

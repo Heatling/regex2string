@@ -1,6 +1,8 @@
 package dk.heatless.regex2string.utilities;
 
+import dk.brics.automaton.RegExp;
 import dk.brics.automaton.State;
+import dk.heatless.regex2string.GenerationState;
 
 public class StateOperations {
 	
@@ -34,6 +36,10 @@ public class StateOperations {
 		return privateStringStep(initialState, text, start, end);
 	}
 	
+	public static GenerationState getInitialGenerationState(RegExp regex) {
+		return new GenerationState(regex.toAutomaton().getInitialState());
+	}
+	
 //Private methods
 	
 	private static State privateStringStep(State initialState, String text, int start, int end){
@@ -42,4 +48,6 @@ public class StateOperations {
 		}
 		return initialState;
 	}
+
+	
 }
