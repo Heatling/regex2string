@@ -1,14 +1,16 @@
 package dk.heatless.regex2string;
 
+import dk.heatless.regex2string.core.Generator;
+
 public class Rule {
 
 //Fields
 	private Condition precondition;
 	private Condition postcondition;
-	private SubstringGenerator generator;
+	private Generator generator;
 
 //Constructors
-	public Rule(Condition precondition, Condition postcondition, SubstringGenerator generator) {
+	public Rule(Condition precondition, Condition postcondition, Generator generator) {
 		
 		this.precondition = precondition;
 		this.postcondition = postcondition;
@@ -36,7 +38,7 @@ public class Rule {
 		return postcondition;
 	}
 
-	public SubstringGenerator getGenerator() {
+	public Generator getGenerator() {
 		return generator;
 	}
 }

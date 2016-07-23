@@ -6,6 +6,7 @@ import java.util.List;
 import dk.brics.automaton.State;
 import dk.heatless.regex2string.utilities.StateOperations;
 
+
 public class GenerationState {
 
 //Fields

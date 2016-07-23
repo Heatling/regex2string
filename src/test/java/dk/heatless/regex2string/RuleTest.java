@@ -1,6 +1,9 @@
 package dk.heatless.regex2string;
 
 import org.testng.annotations.*;
+
+import dk.heatless.regex2string.core.Generator;
+
 import static org.mockito.Mockito.*;
 
 import static org.testng.Assert.*;
@@ -10,7 +13,7 @@ import org.mockito.Matchers;
 
 public class RuleTest {
 	Condition mockPre, mockPost;
-	SubstringGenerator mockGen;
+	Generator mockGen;
 	
 	Rule r;
 	
@@ -34,7 +37,7 @@ public class RuleTest {
 	public void setupTest(){
 		mockPre = mock(Condition.class);
 		mockPost = mock(Condition.class);
-		mockGen = mock(SubstringGenerator.class);
+		mockGen = mock(Generator.class);
 		
 		
 		r = new Rule(mockPre, mockPost, mockGen);
