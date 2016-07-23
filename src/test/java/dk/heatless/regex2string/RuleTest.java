@@ -108,7 +108,7 @@ public class RuleTest {
 		 * by temporarily applying the generated.
 		 */
 		GenerationState mockState = mock(GenerationState.class);
-		TempGenState mockTempState = mock(TempGenState.class);
+		GenerationState mockTempState = mock(GenerationState.class);
 		
 		//precondition must accept the current state
 		when(mockPre.accept(mockState)).thenReturn(true);
@@ -134,7 +134,7 @@ public class RuleTest {
 		 * by temporarily applying the generated.
 		 */
 		GenerationState mockState = mock(GenerationState.class);
-		TempGenState mockTempState = mock(TempGenState.class);
+		GenerationState mockTempState = mock(GenerationState.class);
 		
 		//precondition must accept the current state
 		when(mockPre.accept(mockState)).thenReturn(true);
