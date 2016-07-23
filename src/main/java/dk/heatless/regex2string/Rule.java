@@ -20,7 +20,7 @@ public class Rule {
 	public String applicationResult(GenerationState initialState){
 		if(precondition.accept(initialState)){
 			String generated = generator.generate();
-			if(postcondition.accept(initialState.tempApply(generated))){
+			if(postcondition.accept(initialState.apply(generated))){
 				return generated;
 			}
 		}
