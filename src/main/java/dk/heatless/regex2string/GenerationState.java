@@ -15,6 +15,10 @@ public class GenerationState {
 		return false;
 	}
 	
+	public TempGenState tempApply(String text){
+		return null;
+	}
+	
 	public boolean completed(){
 		return false;
 	}
@@ -22,4 +26,6 @@ public class GenerationState {
 	public String getGenerated(){
 		return null;
 	}
+	
+	
 }

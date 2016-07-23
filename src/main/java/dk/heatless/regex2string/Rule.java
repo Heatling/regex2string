@@ -18,6 +18,12 @@ public class Rule {
 
 //Methods
 	public String applicationResult(GenerationState initialState){
+		if(precondition.accept(initialState)){
+			String generated = generator.generate();
+			if(postcondition.accept(initialState.tempApply(generated))){
+				return generated;
+			}
+		}
 		return null;
 	}
 
