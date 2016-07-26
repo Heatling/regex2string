@@ -1,9 +1,11 @@
-package dk.heatless.regex2string.core;
+package dk.heatless.regex2string.generators;
+
+import dk.heatless.regex2string.GenerationState;
 
 /**
- * A simple generator that always generates the same string.
+ * A simple generator that always generates the same {@code String} or, if the string is not valid, {@code null}.<br>
  */
-public class StaticStringGenerator implements Generator {
+public class StaticStringGenerator extends VerifiedGenerator {
 	
 //Fields
 	/**
@@ -21,8 +23,9 @@ public class StaticStringGenerator implements Generator {
 	}
 
 //Methods
+	
 	@Override
-	public String generate() {
+	protected String generateUnverified(GenerationState state) {
 		return this.toGenerate;
 	}
 	

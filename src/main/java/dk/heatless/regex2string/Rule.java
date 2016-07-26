@@ -1,7 +1,5 @@
 package dk.heatless.regex2string;
 
-import dk.heatless.regex2string.core.Generator;
-
 /**
  * Specifies a {@link String} generation rule.<br>
  * A rule consists of a {@link Condition precondition}, a {@link Condition postcondition}, and a {@link Generator generator}.
@@ -31,7 +29,7 @@ public class Rule {
 	private Condition postcondition;
 	
 	/**
-	 * Generates a {@link String} for applying to a given {@link GenerationState}.
+	 * Generates a {@link String} for a given {@link GenerationState} to step.
 	 */
 	private Generator generator;
 
@@ -45,7 +43,7 @@ public class Rule {
 	 * Must be met by the {@link GenerationState state} that is the result of applying the generated string to a {@link GenerationState state} that 
 	 * the rule is to be applied to.
 	 * @param generator
-	 * Generates a string to apply to a {@link GenerationState state} that the rule is to be applied to.
+	 * Generates a string to step by a {@link GenerationState state} that the rule is to be applied to.
 	 */
 	public Rule(Condition precondition, Condition postcondition, Generator generator) {
 		if(precondition == null){
@@ -75,8 +73,9 @@ public class Rule {
 	 */
 	public String applicationResult(GenerationState state){
 		if(precondition.accept(state)){
-			String generated = generator.generate();
-			if(postcondition.accept(state.step(generated))){
+			String generated = generator.generate(state);
+			GenerationState tempState = state.step(generated);
+			if(postcondition.accept(tempState)){
 				return generated;
 			}
 		}
@@ -94,7 +93,6 @@ public class Rule {
 	}
 	
 	/**
-	 * 
 	 * @return
 	 * The condition that must be true of the state that is the result of applying 
 	 * the {@link String} generated from the {@link #getGenerator generator}to the original state.
@@ -105,7 +103,7 @@ public class Rule {
 	
 	/**
 	 * @return
-	 * A {@link Generator} that generates a {@link String} for applying to a given {@link GenerationState} that the rule can be applied to.
+	 * A {@link Generator} that generates a {@link String} for stepping by a given {@link GenerationState} that the rule can be applied to.
 	 */
 	public Generator getGenerator() {
 		return generator;

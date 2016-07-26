@@ -1,11 +1,7 @@
 package dk.heatless.regex2string;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.State;
-import dk.heatless.regex2string.utilities.StateOperations;
 
 /**
  * Holds the state of the process of generating a {@link String} from a {@link RegExp regular expression}.<br>
@@ -206,10 +202,6 @@ public class GenerationState {
 	private String getGeneratedWithPrevious(StringBuilder result){
 		if(previous == null){
 			//This is the root state
-			
-			/* This reversing is potentially problematic when used
-			 * with multi-byte character sets.
-			 */
 			result.reverse();
 			return result.toString();
 		}else{

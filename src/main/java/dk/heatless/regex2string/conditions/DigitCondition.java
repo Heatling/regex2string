@@ -1,17 +1,18 @@
 package dk.heatless.regex2string.conditions;
 
 import dk.brics.automaton.Transition;
-import dk.heatless.regex2string.Condition;
 import dk.heatless.regex2string.GenerationState;
 
+/**
+ * Condition that requires the state to accept a digit.<br>
+ * A digit is defined by {@link Character#isDigit}.
+ */
 public class DigitCondition extends NotNullCondition {
 
 	@Override
-	public boolean accept(GenerationState state) {
+	protected boolean acceptNotNull(GenerationState state) {
 		for(Transition t : state.getCurrentState().getTransitions()){
-			if(Character.isLetter(t.getMin()) && Character.isLetter(t.getMin())){
-				return super.accept(state);
-			}
+			return Character.isDigit(t.getMin()) && Character.isDigit(t.getMax());
 		}
 		return false;
 	}

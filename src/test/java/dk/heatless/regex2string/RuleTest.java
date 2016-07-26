@@ -2,8 +2,6 @@ package dk.heatless.regex2string;
 
 import org.testng.annotations.*;
 
-import dk.heatless.regex2string.core.Generator;
-
 import static org.mockito.Mockito.*;
 
 import static org.testng.Assert.*;
@@ -31,16 +29,43 @@ public class RuleTest {
 		}
 		
 	}
-
 	
+		
 	@BeforeMethod
-	public void setupTest(){
+	public void setup(){
 		mockPre = mock(Condition.class);
 		mockPost = mock(Condition.class);
 		mockGen = mock(Generator.class);
 		
 		
 		r = new Rule(mockPre, mockPost, mockGen);
+	}
+	
+	@Test
+	public void NullTest(){
+		/*
+		 * Test that the constructor does not accept null arguments
+		 */
+		try{
+			new Rule(null, mockPost, mockGen);
+			fail("Should throw IllegalArgumentException");
+		}catch(IllegalArgumentException err){
+			assertEquals(err.getMessage(), "Precondition was null");
+		}
+		
+		try{
+			new Rule(mockPre, null, mockGen);
+			fail("Should throw IllegalArgumentException");
+		}catch(IllegalArgumentException err){
+			assertEquals(err.getMessage(), "Postcondition was null");
+		}
+		
+		try{
+			new Rule(mockPre, mockPost, null);
+			fail("Should throw IllegalArgumentException");
+		}catch(IllegalArgumentException err){
+			assertEquals(err.getMessage(), "Generator was null");
+		}
 	}
 	
 	@Test
@@ -58,16 +83,17 @@ public class RuleTest {
 		/*
 		 * Test applicatoinResult() where both conditions succeed
 		 */
-		GenerationState mockState = mock(GenerationState.class);
+		GenerationState mockState = mockGenerationStateThatAcceptsAnythingAndReturnsItself();
 		
 		//precondition must accept the current state
-		when(mockPre.accept(mockState)).thenReturn(true);
+		mockPreAcceptsState(mockState, true);
 		
 		//Postcondition accepts any resulting state
-		when(mockPost.accept(any(GenerationState.class))).thenReturn(true);
+		mockPostAcceptsState(any(GenerationState.class), true);
 		
+		//Generator successfully generates a string from the initial state
 		String result = "generated string";
-		when(mockGen.generate()).thenReturn(result);
+		mockGenReturnsForState(mockState, result);
 		
 		assertEquals(r.applicationResult(mockState), result);
 		
@@ -80,7 +106,7 @@ public class RuleTest {
 		 */
 		GenerationState mockState = mock(GenerationState.class);
 		
-		when(mockPre.accept(mockState)).thenReturn(false);
+		mockPreAcceptsState(mockState, false);
 		
 		assertEquals(r.applicationResult(mockState), null);
 	}
@@ -92,81 +118,55 @@ public class RuleTest {
 		 */
 		GenerationState mockState = mock(GenerationState.class);
 		
-		//precondition must accept the current state
-		when(mockPre.accept(mockState)).thenReturn(true);
+		mockPreAcceptsState(mockState, true);
 		
 		//Postcondition reject any resulting state
-		when(mockPost.accept(any(GenerationState.class))).thenReturn(false);
+		mockPostAcceptsState(any(GenerationState.class), false);
 		
+		//Generator successfully generates a string from the initial state
 		String result = "generated string";
-		when(mockGen.generate()).thenReturn(result);
+		mockGenReturnsForState(mockState, result);
 		
 		assertEquals(r.applicationResult(mockState), null);
 	}
 	
 	@Test
-	public void testApplicationResultPostConditionFailsOnTempState(){
+	public void testApplicationResultGeneratorFail(){
 		/*
-		 * Test that the postcondition does not accept the temporary state created
-		 * by temporarily applying the generated.
+		 * Test applicationResult() where the generator fails to generate a string
 		 */
 		GenerationState mockState = mock(GenerationState.class);
-		GenerationState mockTempState = mock(GenerationState.class);
 		
-		//precondition must accept the current state
-		when(mockPre.accept(mockState)).thenReturn(true);
+		mockPreAcceptsState(mockState, true);
 		
-		//Postcondition reject any resulting state
-		when(mockPost.accept(mockTempState)).thenReturn(false);
-				
-		when(mockPost.accept(argThat(new NotObject(mockTempState)))).thenReturn(true);
-		
-		String result = "generated string";
-		when(mockGen.generate()).thenReturn(result);
-		
-		//Using apply() on the current state returns a temporary state
-		when(mockState.step(result)).thenReturn(mockTempState);
+		//Generator fails to generate a string
+		mockGenReturnsForState(mockState, null);
 		
 		assertEquals(r.applicationResult(mockState), null);
 	}
 	
-	//@Test
-	public void testApplicationResultPostConditionAcceptsTempState(){
-		/*
-		 * Test that the postcondition does not accept the temporary state created
-		 * by temporarily applying the generated.
-		 */
-		GenerationState mockState = mock(GenerationState.class);
-		GenerationState mockTempState = mock(GenerationState.class);
-		
-		//precondition must accept the current state
-		when(mockPre.accept(mockState)).thenReturn(true);
-		
-		//Postcondition reject any resulting state
-		when(mockPost.accept(mockTempState)).thenReturn(true);
-				
-		when(mockPost.accept(argThat(new NotObject(mockTempState)))).thenReturn(false);
-		
-		String result = "generated string";
-		when(mockGen.generate()).thenReturn(result);
-		
-		//Using apply() on the current state returns a temporary state
-		when(mockState.step(result)).thenReturn(mockTempState);
-		
-		assertEquals(r.applicationResult(mockState), result);
-	}
 	
 
+//Utility methods
+	
+	public void mockPreAcceptsState(GenerationState state, boolean accept) {
+		when(mockPre.accept(state)).thenReturn(accept);
+	}
+	
+	public void mockPostAcceptsState(GenerationState state, boolean accept) {
+		when(mockPost.accept(state)).thenReturn(accept);
+	}
 
+	public void mockGenReturnsForState(GenerationState state, String toReturn){
+		when(mockGen.generate(state)).thenReturn(toReturn);
+	}
 
-
-
-
-
-
-
-
-
+	public GenerationState mockGenerationStateThatAcceptsAnythingAndReturnsItself(){
+		GenerationState g = mock(GenerationState.class);
+		when(g.step(any(String.class))).thenReturn(g);
+		when(g.step(null)).thenReturn(g);
+		return g;
+	}
 
 
 

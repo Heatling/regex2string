@@ -1,12 +1,11 @@
 package dk.heatless.regex2string.conditions;
 
-import dk.heatless.regex2string.Condition;
 import dk.heatless.regex2string.GenerationState;
 
 /**
  * A condition that specifies how far the generation process is.
  */
-public class AtGenerationIndex implements Condition {
+public class AtGenerationIndexCondition extends NotNullCondition {
 
 //Fields
 	/**
@@ -20,7 +19,7 @@ public class AtGenerationIndex implements Condition {
 	 * In other words, index-1 characters must have already been generated to meet the condition.
 	 * @param index
 	 */
-	public AtGenerationIndex(int index){
+	public AtGenerationIndexCondition(int index){
 		if(index < 0){
 			throw new IllegalArgumentException("Index is negative");
 		}
@@ -29,8 +28,8 @@ public class AtGenerationIndex implements Condition {
 	}
 	
 	@Override
-	public boolean accept(GenerationState state) {
-		return state == null ? false : state.getLengthOfGenerated() == index;
+	public boolean acceptNotNull(GenerationState state) {
+		return state.getLengthOfGenerated() == index;
 	}
 
 }

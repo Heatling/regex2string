@@ -12,18 +12,18 @@ import dk.heatless.regex2string.utilities.StateOperations;
 
 public class GenerationStateTest {
 	
-	State currentState;
+	State mockState;
 	GenerationState genState;
 	Rule rule;
 	
 	@BeforeMethod
 	public void setupTest(){
 		
-		currentState = mock(State.class);
-		when(currentState.step(anyChar())).thenReturn(currentState);
+		mockState = mock(State.class);
+		when(mockState.step(anyChar())).thenReturn(mockState);
 		rule = mock(Rule.class);
 		
-		genState = new GenerationState(currentState);
+		genState = new GenerationState(mockState);
 	}
 	
 	@Test
@@ -40,7 +40,7 @@ public class GenerationStateTest {
 		/*
 		 * Test getters at init
 		 */
-		assertTrue(genState.getCurrentState() == currentState);
+		assertTrue(genState.getCurrentState() == mockState);
 		assertEquals(genState.getPrevious(), null);
 	}
 
@@ -53,9 +53,9 @@ public class GenerationStateTest {
 		
 		String result = "generated string";
 		Automaton regex = (new RegExp(result + "some more")).toAutomaton();
-		currentState = regex.getInitialState();
-		State endState = StateOperations.stringStep(currentState, result);
-		genState = new GenerationState(currentState);
+		mockState = regex.getInitialState();
+		State endState = StateOperations.stringStep(mockState, result);
+		genState = new GenerationState(mockState);
 		
 		
 		when(rule.applicationResult(genState)).thenReturn(result);
@@ -76,8 +76,8 @@ public class GenerationStateTest {
 		
 		String result = "generated string";
 		Automaton regex = (new RegExp(result + "some more")).toAutomaton();
-		currentState = regex.getInitialState();
-		genState = new GenerationState(currentState);
+		mockState = regex.getInitialState();
+		genState = new GenerationState(mockState);
 		
 		when(rule.applicationResult(genState)).thenReturn(null);
 		
@@ -86,7 +86,7 @@ public class GenerationStateTest {
 		assertEquals(genState.apply(rule), null);
 		
 		assertEquals(genState.getGenerated(), "");
-		assertTrue(genState.getCurrentState() == currentState);
+		assertTrue(genState.getCurrentState() == mockState);
 	}
 
 	@Test
@@ -125,9 +125,9 @@ public class GenerationStateTest {
 		 */
 		String result = "bleh";
 		Automaton regex = (new RegExp(result + "some more")).toAutomaton();
-		currentState = regex.getInitialState();
-		State endState = StateOperations.stringStep(currentState, result);
-		genState = new GenerationState(currentState);
+		mockState = regex.getInitialState();
+		State endState = StateOperations.stringStep(mockState, result);
+		genState = new GenerationState(mockState);
 		
 		genState = genState.step(result);
 		
@@ -145,13 +145,13 @@ public class GenerationStateTest {
 		String correctString = "bleh";
 		String wrongString = "wrong";
 		Automaton regex = (new RegExp(correctString + "some more")).toAutomaton();
-		currentState = regex.getInitialState();
-		genState = new GenerationState(currentState);
+		mockState = regex.getInitialState();
+		genState = new GenerationState(mockState);
 		
 		assertEquals(genState.step(wrongString), null);
 		
 		assertEquals(genState.getGenerated(), "");
-		assertTrue(genState.getCurrentState() == currentState);
+		assertTrue(genState.getCurrentState() == mockState);
 	}
 	
 	@Test
@@ -159,16 +159,36 @@ public class GenerationStateTest {
 		/*
 		 * Test that completed() return true when the current state is an acceptance state
 		 */
-		when(currentState.isAccept()).thenReturn(true);
+		when(mockState.isAccept()).thenReturn(true);
 		
 		assertTrue(genState.completed());
 		
-		when(currentState.isAccept()).thenReturn(false);
+		when(mockState.isAccept()).thenReturn(false);
 		
 		assertFalse(genState.completed());
 	}
 
-
+	@Test
+	public void testGetLengthOfGeneratedInitial(){
+		/*
+		 * Test that getLengthOfGenerated returns 0 if the state is initial
+		 */
+		assertEquals(new GenerationState(mockState).getLengthOfGenerated(), 0);
+	}
+	
+	@Test
+	public void testGetLengthOfGeneratedIntermediate(){
+		/*
+		 * Test that getLengthOfGenerated return the correct length
+		 */
+		GenerationState currentState = new GenerationState(mockState);
+		when(mockState.step(anyChar())).thenReturn(mockState);
+		
+		String text = "some string";
+		currentState = currentState.step(text);
+		
+		assertEquals(currentState.getLengthOfGenerated(), text.length());
+	}
 
 
 
