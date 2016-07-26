@@ -22,7 +22,7 @@ import dk.heatless.regex2string.utilities.StateOperations;
  * 	<li>Initially, the {@link GenerationState} holds the {@link Automaton#getInitialState initial state} 
  * 		of the {@link RegExp regular expression} {@link Automaton} and no previous {@link GenrationState}.</li>
  * 	<li>
- * 		{@link #apply(Rule) Applying a Rule} or a {@link #apply(String) String} to the {@link GenerationState} 
+ * 		{@link #apply(Rule) Applying a Rule} or a {@link #step(String) String} to the {@link GenerationState} 
  * 		results in a new {@link GenerationState}. <br>
  * 		The new {@link GenerationState} holds the current {@link State} of the {@link Automaton}
  * 		after using the applied string (previously mentioned) to {@link State#step step} through the automaton.<br>
@@ -38,7 +38,7 @@ import dk.heatless.regex2string.utilities.StateOperations;
  * and are the exact ones used by the class. Changing the state of those instances will change the abstract state of the class but not the internal state,
  * which could result in the class instance not complying with the class invariants. Therefore, making such changes to the instances must be done with caution.
  */
-public final class GenerationState {
+public class GenerationState {
 
 //Fields
 	/**
@@ -47,11 +47,11 @@ public final class GenerationState {
 	 */
 	private final State currentState;
 	/**
-	 * The String value that was generated to get to this generation state.
-	 * If this generation state is the initial state, the value of this string
-	 * is not part of the final generated string.
+	 * The char value that was generated to get to this generation state.
+	 * If this generation state is the initial state, the value of this char
+	 * is not part of the generated string.
 	 */
-	private final String generatedString;
+	private final char stepChar;
 	/**
 	 * The previous generation state. If null, then this state is the initial generation state
 	 * IE nothing has been generated before.
@@ -66,7 +66,7 @@ public final class GenerationState {
 	 */
 	public GenerationState(State initialState) {
 		this.currentState = initialState;
-		this.generatedString = "";
+		this.stepChar = ' ';
 		this.previous = null;
 	}
 	
@@ -76,14 +76,14 @@ public final class GenerationState {
 	 * The current {@link State} of the {@link RegExp regular expression} {@link Automaton} after applying
 	 * the given string, and whatever was generated before it, to the {@link Automaton#getInitialState() initial state}
 	 * of the @link RegExp regular expression}.
-	 * @param generatedString
-	 * The string that was generated to result in the generation state that is being constructed.
+	 * @param stepChar
+	 * The char that was generated to result in the generation state that is being constructed.
 	 * @param previous
 	 * The previous state in the generation process.
 	 */
-	public GenerationState(State currentState, String generatedString, GenerationState previous){
+	public GenerationState(State currentState, char stepChar, GenerationState previous){
 		this.currentState = currentState;
-		this.generatedString = generatedString;
+		this.stepChar = stepChar;
 		this.previous = previous;
 	}
 	
@@ -95,31 +95,47 @@ public final class GenerationState {
 	 * @param rule
 	 * to try to apply
 	 * @return
-	 * The generation state that was the result of a successfull application of the given {@link Rule}.<br>
+	 * The generation state that was the result of a successful application of the given {@link Rule}.<br>
 	 * If the rule cannot be applied to the state, {@code null} is returned.
 	 */
 	public GenerationState apply(Rule rule) {
 		String result = rule.applicationResult(this);
 		if(result != null){
-			return apply(result);
+			return step(result);
 		}
 		return null;
 	}
 	
 	/**
-	 * Tries to apply the given {@link String} to the current state.
+	 * Tries to step with the given {@link String} on the current state.
 	 * @param text
-	 * to try to apply
+	 * to try to step with.
 	 * @return
 	 * The generation state that was the result of a successful application of the given {@link String}.<br>
 	 * If the string cannot be applied to the state, {@code null} is returned.
 	 */
-	public GenerationState apply(String text) {
-		State newState = StateOperations.stringStep(this.currentState, text);
-		if(newState != null){
-			return new GenerationState(newState, text, this);
+	public GenerationState step(String text) {
+		GenerationState newState = this;
+		for(int i = 0; i<text.length() && newState != null; i++){
+			newState = newState.step(text.charAt(i));
 		}
-		return null;
+		return newState;
+	}
+	
+	/**
+	 * Step with the given char returning the resulting generation state.
+	 * @param c
+	 * Character to generate.
+	 * @return
+	 * The resulting state, if the character is valid, otherwise {@code null}.
+	 */
+	public GenerationState step(char c){
+		State newState = currentState.step(c);
+		
+		return (newState != null) ? 
+				new GenerationState(newState, c, this)
+				: 
+				null;
 	}
 	
 	/**
@@ -148,7 +164,7 @@ public final class GenerationState {
 	 * is not part of the final generated string.
 	 */
 	public String getGenerated(){
-		return getGeneratedWithPrevious(new ArrayList<String>());
+		return getGeneratedWithPrevious(new StringBuilder());
 	}
 	
 	/**
@@ -160,7 +176,7 @@ public final class GenerationState {
 			//root
 			return 0;
 		}else{
-			return generatedString.length() + previous.getLengthOfGenerated();
+			return 1 + previous.getLengthOfGenerated();
 		}
 	}
 	
@@ -175,29 +191,31 @@ public final class GenerationState {
 
 //Private methods
 	/**
+	 * ******
+	 * Rename
+	 * ******
 	 * Used to construct the result of {@link #getGenerated()}.<br>
-	 * Traverses all previous states recursively and collects their {@link #generatedString} into the given list.
-	 * The list will then have all the substrings in reverse order. The base case will then concatenate them in correct order
-	 * into the complete string that has been generated to result in this generation state.
+	 * Traverses all previous states recursively and collects their {@link #stepChar}.
+	 * The result will be in reverse order. The base case will then reorder and return the string
+	 * that was generated to reach the calling generation state.
 	 * @param generatedAfter
-	 * a list all the generated substrings in reverse order.
+	 * all the generated chars in reverse order.
 	 * @return
 	 * The complete string that was run on the regex automaton to result in this generation state.
 	 */
-	private String getGeneratedWithPrevious(List<String> generatedAfter){
+	private String getGeneratedWithPrevious(StringBuilder result){
 		if(previous == null){
 			//This is the root state
-			StringBuilder result = new StringBuilder();
 			
-			//Construct complete string
-			for(int i = generatedAfter.size()-1; i>=0; i--){
-				result.append(generatedAfter.get(i));
-			}
+			/* This reversing is potentially problematic when used
+			 * with multi-byte character sets.
+			 */
+			result.reverse();
 			return result.toString();
 		}else{
 			//not the root
-			generatedAfter.add(this.generatedString);
-			return this.previous.getGeneratedWithPrevious(generatedAfter);
+			result.append(this.stepChar);
+			return this.previous.getGeneratedWithPrevious(result);
 		}
 	}
 	

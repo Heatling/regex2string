@@ -1,4 +1,4 @@
-package dk.heatless.regex2string.utilities;
+package dk.heatless.regex2string;
 
 import static org.testng.Assert.*;
 

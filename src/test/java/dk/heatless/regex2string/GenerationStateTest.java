@@ -38,7 +38,7 @@ public class GenerationStateTest {
 	@Test
 	public void testGetters(){
 		/*
-		 * Test getters
+		 * Test getters at init
 		 */
 		assertTrue(genState.getCurrentState() == currentState);
 		assertEquals(genState.getPrevious(), null);
@@ -129,7 +129,7 @@ public class GenerationStateTest {
 		State endState = StateOperations.stringStep(currentState, result);
 		genState = new GenerationState(currentState);
 		
-		genState = genState.apply(result);
+		genState = genState.step(result);
 		
 		assertNotEquals(genState, null);
 		
@@ -148,7 +148,7 @@ public class GenerationStateTest {
 		currentState = regex.getInitialState();
 		genState = new GenerationState(currentState);
 		
-		assertEquals(genState.apply(wrongString), null);
+		assertEquals(genState.step(wrongString), null);
 		
 		assertEquals(genState.getGenerated(), "");
 		assertTrue(genState.getCurrentState() == currentState);

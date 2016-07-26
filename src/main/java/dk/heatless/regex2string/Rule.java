@@ -76,7 +76,7 @@ public class Rule {
 	public String applicationResult(GenerationState state){
 		if(precondition.accept(state)){
 			String generated = generator.generate();
-			if(postcondition.accept(state.apply(generated))){
+			if(postcondition.accept(state.step(generated))){
 				return generated;
 			}
 		}

@@ -125,7 +125,7 @@ public class RuleTest {
 		when(mockGen.generate()).thenReturn(result);
 		
 		//Using apply() on the current state returns a temporary state
-		when(mockState.apply(result)).thenReturn(mockTempState);
+		when(mockState.step(result)).thenReturn(mockTempState);
 		
 		assertEquals(r.applicationResult(mockState), null);
 	}
@@ -151,7 +151,7 @@ public class RuleTest {
 		when(mockGen.generate()).thenReturn(result);
 		
 		//Using apply() on the current state returns a temporary state
-		when(mockState.apply(result)).thenReturn(mockTempState);
+		when(mockState.step(result)).thenReturn(mockTempState);
 		
 		assertEquals(r.applicationResult(mockState), result);
 	}
