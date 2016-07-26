@@ -14,7 +14,7 @@ import dk.heatless.regex2string.utilities.StateOperations;
  * <ul>
  * 	<li>The current {@link State} in the {@link Automaton} of the {@link RegExp regular expression}.</li>
  * 	<li>The previous {@link GeneratedState} of the generation process before reaching the current one.</li>
- * 	<li>The string applied to the previous {@link GenerationState} that resulted in the current one.</li>
+ * 	<li>The char used to {@link #step} with from the previous {@link GenerationState} that resulted in the current one.</li>
  * </ul>
  * <br>
  * The process of generating a {@link String} from a {@link RegExp regular expression} is modeled by this class as follows:
@@ -22,12 +22,12 @@ import dk.heatless.regex2string.utilities.StateOperations;
  * 	<li>Initially, the {@link GenerationState} holds the {@link Automaton#getInitialState initial state} 
  * 		of the {@link RegExp regular expression} {@link Automaton} and no previous {@link GenrationState}.</li>
  * 	<li>
- * 		{@link #apply(Rule) Applying a Rule} or a {@link #step(String) String} to the {@link GenerationState} 
+ * 		{@link #apply(Rule) Applying a Rule} or a {@link #step(char) character} to the {@link GenerationState} 
  * 		results in a new {@link GenerationState}. <br>
  * 		The new {@link GenerationState} holds the current {@link State} of the {@link Automaton}
- * 		after using the applied string (previously mentioned) to {@link State#step step} through the automaton.<br>
- * 		Additionally, the new {@link GenerationState} holds the previous {@link GenerationState} and the {@link String}
- * 		that was applied to the previous {@link GenerationState} to get to the new one.
+ * 		after using the stepped character (previously mentioned) to {@link State#step step} through the automaton.<br>
+ * 		Additionally, the new {@link GenerationState} holds the previous {@link GenerationState} and the {@code char}
+ * 		that was stepped to the previous {@link GenerationState} to get to the new one.
  * 	</li>
  * 	<li>The generation process is {@link #completed} when the {@link Automaton} is in an {@link State#isAccept acceptance state}, 
  * 		which means that the generated {@link String} matches the {@link RegExp regular expression}.</li>

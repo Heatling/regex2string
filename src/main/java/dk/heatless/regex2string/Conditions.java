@@ -1,6 +1,7 @@
 package dk.heatless.regex2string;
 
 import dk.heatless.regex2string.conditions.AtGenerationIndex;
+import dk.heatless.regex2string.conditions.NotNullCondition;
 import dk.heatless.regex2string.conditions.ValidStringHasBeenGenerated;
 
 /**
@@ -17,7 +18,11 @@ public class Conditions {
 		/**
 		 * To meet this condition, the generation process must be completed.
 		 */
-		VALID_STRING_HAS_BEEN_GENERATED = new ValidStringHasBeenGenerated()
+		VALID_STRING_HAS_BEEN_GENERATED = new ValidStringHasBeenGenerated(),
+		/**
+		 * Accepts anything but {@code null}.
+		 */
+		NO_CONDITION = new NotNullCondition()
 	;
 	
 }
