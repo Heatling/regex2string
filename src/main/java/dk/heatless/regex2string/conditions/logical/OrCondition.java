@@ -1,7 +1,8 @@
-package dk.heatless.regex2string.conditions;
+package dk.heatless.regex2string.conditions.logical;
 
 import dk.heatless.regex2string.Condition;
 import dk.heatless.regex2string.GenerationState;
+import dk.heatless.regex2string.conditions.CompareCondition;
 
 /**
  * A condition that compares the results of two other condition
