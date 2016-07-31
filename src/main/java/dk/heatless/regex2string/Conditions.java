@@ -26,7 +26,7 @@ public class Conditions {
 	public static final Condition NO_CONDITION = new NotNullCondition(){
 		@Override
 		protected boolean acceptNotNull(GenerationState state) {
-					return true;
+			return true;
 		}
 	};
 	
