@@ -24,7 +24,8 @@ public abstract class VerifiedGenerator implements Generator {
 	@Override
 	public final String generate(GenerationState state) {
 		String text = generateUnverified(state);
-		return (state.step(text)!= null)? text: null;
+		return text != null ? 
+				(state.step(text)!= null)? text: null : null;
 	}
 
 }
