@@ -3,6 +3,7 @@ package dk.heatless.regex2string.rules;
 import dk.heatless.regex2string.Conditions;
 import dk.heatless.regex2string.Generator;
 import dk.heatless.regex2string.Rule;
+import dk.heatless.regex2string.conditions.ValidStringHasBeenGeneratedCondition;
 
 /**
  * A rule that generates a postfix to the string generated for the regular expression.
@@ -20,7 +21,7 @@ public class PostfixRule extends Rule {
 	 * Postcondition: {@link Conditions#VALID_STRING_HAS_BEEN_GENERATED}
 	 */
 	public PostfixRule(Generator generator) {
-		super(Conditions.NO_CONDITION, Conditions.VALID_STRING_HAS_BEEN_GENERATED, generator);
+		super(Conditions.NO_CONDITION, new ValidStringHasBeenGeneratedCondition(), generator);
 	}
 
 }

@@ -61,9 +61,7 @@ public class GenerationState {
 	 * The initial {@link State} of the {@link RegExp regular expression} {@link Automaton}.
 	 */
 	public GenerationState(State initialState) {
-		this.currentState = initialState;
-		this.stepChar = ' ';
-		this.previous = null;
+		this(initialState, ' ', null);
 	}
 	
 	/**
@@ -78,6 +76,9 @@ public class GenerationState {
 	 * The previous state in the generation process.
 	 */
 	public GenerationState(State currentState, char stepChar, GenerationState previous){
+		if(currentState == null){
+			throw new IllegalArgumentException("State was null");
+		}
 		this.currentState = currentState;
 		this.stepChar = stepChar;
 		this.previous = previous;

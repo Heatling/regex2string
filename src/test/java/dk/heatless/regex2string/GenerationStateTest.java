@@ -34,6 +34,25 @@ public class GenerationStateTest {
 		assertFalse(genState.completed());
 		assertEquals(genState.getGenerated(), "");
 	}
+	@Test
+	public void nullTest(){
+		/*
+		 * Test that the constructors do not accept null States.
+		 */
+		try{
+			new GenerationState(null);
+			fail("Should throw IllegalArgumentException");
+		}catch(IllegalArgumentException err){
+			assertEquals(err.getMessage(), "State was null");
+		}
+		
+		try{
+			new GenerationState(null, ' ', mock(GenerationState.class));
+			fail("Should throw IllegalArgumentException");
+		}catch(IllegalArgumentException err){
+			assertEquals(err.getMessage(), "State was null");
+		}
+	}
 	
 	@Test
 	public void testGetters(){
