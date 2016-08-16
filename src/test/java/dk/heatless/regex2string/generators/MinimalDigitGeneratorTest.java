@@ -1,10 +1,6 @@
 package dk.heatless.regex2string.generators;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.HashSet;
-import java.util.Set;
+import static org.mockito.Mockito.*;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

@@ -7,7 +7,6 @@ import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
 import org.mockito.ArgumentMatcher;
-import org.mockito.Matchers;
 
 public class RuleTest {
 	Condition mockPre, mockPost;

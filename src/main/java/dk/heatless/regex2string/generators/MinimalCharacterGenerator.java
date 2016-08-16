@@ -7,16 +7,27 @@ import java.util.Set;
 
 import dk.brics.automaton.Transition;
 import dk.heatless.regex2string.GenerationState;
+import dk.heatless.regex2string.Generator;
 
-public class MinimalCharacterGenerator extends VerifiedGenerator{
+/**
+ * A generator that generates the minimal character accepted by the generation state.<br>
+ * Minimal is defined by a char comparison.
+ */
+public class MinimalCharacterGenerator implements Generator{
 	
+	/**
+	 * 
+	 * @param t
+	 * @param addTo
+	 * @return
+	 */
 	protected boolean getMinimal(Transition t, List<Character> addTo){
 		addTo.add(t.getMin());
 		return true;
 	}
 	
 	@Override
-	protected String generateUnverified(GenerationState state) {
+	public String generate(GenerationState state) {
 		Set<Transition> transitions = state.getCurrentState().getTransitions();
 		List<Character> minChars = new ArrayList<Character>();
 		for(Transition t : transitions){
