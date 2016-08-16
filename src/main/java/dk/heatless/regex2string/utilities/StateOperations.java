@@ -54,14 +54,7 @@ public class StateOperations {
 		if(text == null){
 			throw new IllegalArgumentException("String was null");
 		}
-		if(start<0 || start>= text.length()){
-			throw new StringIndexOutOfBoundsException("Start index out of bounds");
-		}
-		if(end<=0 || end>text.length()){
-			throw new StringIndexOutOfBoundsException("End index out of bounds");
-		}
-		
-		
+				
 		return privateStringStep(initialState, text, start, end);
 	}
 	

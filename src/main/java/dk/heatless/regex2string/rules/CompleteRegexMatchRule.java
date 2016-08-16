@@ -3,6 +3,7 @@ package dk.heatless.regex2string.rules;
 import dk.heatless.regex2string.Conditions;
 import dk.heatless.regex2string.Generator;
 import dk.heatless.regex2string.Rule;
+import dk.heatless.regex2string.conditions.ValidStringHasBeenGeneratedCondition;
 
 /**
  * A rule that generates a String that on its own matches the {@link RegExp regular expression}.
@@ -17,11 +18,11 @@ public class CompleteRegexMatchRule extends Rule {
 	 * 
 	 * @see
 	 * 	Precondition: 	{@link Conditions#START_OF_GENERATION}<br> 
-	 *  postcondition: 	{@link Conditions#VALID_STRING_HAS_BEEN_GENERATED}
+	 *  postcondition: 	{@link ValidStringHasBeenGeneratedCondition}
 	 */
 	public CompleteRegexMatchRule(Generator generator){
-		super(	Conditions.START_OF_GENERATION, 
-				Conditions.VALID_STRING_HAS_BEEN_GENERATED, 
+		super(	Conditions.START_OF_GENERATION,
+				new ValidStringHasBeenGeneratedCondition(),
 				generator);
 	}
 	
