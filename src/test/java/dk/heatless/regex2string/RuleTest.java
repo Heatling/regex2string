@@ -2,6 +2,8 @@ package dk.heatless.regex2string;
 
 import org.testng.annotations.*;
 
+import dk.heatless.regex2string.rules.Rule;
+
 import static org.mockito.Mockito.*;
 
 import static org.testng.Assert.*;

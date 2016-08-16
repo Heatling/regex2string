@@ -2,7 +2,6 @@ package dk.heatless.regex2string.rules;
 
 import dk.heatless.regex2string.Conditions;
 import dk.heatless.regex2string.Generator;
-import dk.heatless.regex2string.Rule;
 
 /**
  * A rule that generates a prefix to the string generated for the regular expression.

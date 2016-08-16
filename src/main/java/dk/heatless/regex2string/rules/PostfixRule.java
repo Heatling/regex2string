@@ -2,7 +2,6 @@ package dk.heatless.regex2string.rules;
 
 import dk.heatless.regex2string.Conditions;
 import dk.heatless.regex2string.Generator;
-import dk.heatless.regex2string.Rule;
 import dk.heatless.regex2string.conditions.ValidStringHasBeenGeneratedCondition;
 
 /**

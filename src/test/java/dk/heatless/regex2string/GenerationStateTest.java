@@ -8,6 +8,7 @@ import static org.testng.Assert.*;
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.RegExp;
 import dk.brics.automaton.State;
+import dk.heatless.regex2string.rules.Rule;
 import dk.heatless.regex2string.utilities.StateOperations;
 
 public class GenerationStateTest {

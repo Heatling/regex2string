@@ -2,7 +2,6 @@ package dk.heatless.regex2string.generators;
 
 import java.util.HashSet;
 import java.util.Random;
-import java.util.TreeSet;
 
 import org.testng.annotations.*;
 

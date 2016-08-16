@@ -2,6 +2,7 @@ package dk.heatless.regex2string;
 
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.State;
+import dk.heatless.regex2string.rules.Rule;
 
 /**
  * Holds the state of the process of generating a {@link String} from a {@link RegExp regular expression}.<br>
@@ -95,8 +96,8 @@ public class GenerationState {
 	 * The generation state that was the result of a successful application of the given {@link Rule}.<br>
 	 * If the rule cannot be applied to the state, {@code null} is returned.
 	 */
-	public GenerationState apply(Rule rule) {
-		String result = rule.applicationResult(this);
+	public GenerationState apply(Applicable application) {
+		String result = application.applicationResult(this);
 		if(result != null){
 			return step(result);
 		}
@@ -130,9 +131,9 @@ public class GenerationState {
 		State newState = currentState.step(c);
 		
 		return (newState != null) ? 
-				new GenerationState(newState, c, this)
+					new GenerationState(newState, c, this)
 				: 
-				null;
+					null;
 	}
 	
 	/**

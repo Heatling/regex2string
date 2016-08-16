@@ -2,7 +2,6 @@ package dk.heatless.regex2string;
 
 import dk.heatless.regex2string.conditions.AtGenerationIndexCondition;
 import dk.heatless.regex2string.conditions.NotNullCondition;
-import dk.heatless.regex2string.conditions.ValidStringHasBeenGeneratedCondition;
 
 /**
  * A collection of standard conditions, ready to be used.
