@@ -96,8 +96,8 @@ public class GenerationState {
 	 * The generation state that was the result of a successful application of the given {@link Rule}.<br>
 	 * If the rule cannot be applied to the state, {@code null} is returned.
 	 */
-	public GenerationState apply(Applicable application) {
-		String result = application.applicationResult(this);
+	public GenerationState apply(Generator generator) {
+		String result = generator.generate(this);
 		if(result != null){
 			return step(result);
 		}

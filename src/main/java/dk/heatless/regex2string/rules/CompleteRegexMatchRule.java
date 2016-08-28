@@ -10,7 +10,7 @@ import dk.heatless.regex2string.conditions.ValidStringHasBeenGeneratedCondition;
 public class CompleteRegexMatchRule extends Rule {
 	
 	/**
-	 * Constructs a rule that is applicable only if nothing has been generated yet and
+	 * Constructs a rule that is Generator only if nothing has been generated yet and
 	 * the generated string from the given {@link Generator generator} matches the {@link RegExp regular expression}.
 	 * @param generator
 	 * Generates a string that matches the regular expression.

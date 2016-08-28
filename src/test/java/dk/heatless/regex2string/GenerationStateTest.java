@@ -78,7 +78,7 @@ public class GenerationStateTest {
 		genState = new GenerationState(mockState);
 		
 		
-		when(rule.applicationResult(genState)).thenReturn(result);
+		when(rule.generate(genState)).thenReturn(result);
 		
 		genState = genState.apply(rule);
 		
@@ -99,7 +99,7 @@ public class GenerationStateTest {
 		mockState = regex.getInitialState();
 		genState = new GenerationState(mockState);
 		
-		when(rule.applicationResult(genState)).thenReturn(null);
+		when(rule.generate(genState)).thenReturn(null);
 		
 		
 		
@@ -118,18 +118,18 @@ public class GenerationStateTest {
 				word2 = "string", 
 				result = word1+word2;
 		
-		when(rule.applicationResult(genState)).thenReturn(word1);
+		when(rule.generate(genState)).thenReturn(word1);
 		
 		genState = genState.apply(rule);
 		
 		assertEquals(genState.getGenerated(), word1);
 		
-		when(rule.applicationResult(genState)).thenReturn(null);
+		when(rule.generate(genState)).thenReturn(null);
 		
 		assertEquals(genState.apply(rule), null);
 		assertEquals(genState.getGenerated(), word1);
 		
-		when(rule.applicationResult(genState)).thenReturn(word2);
+		when(rule.generate(genState)).thenReturn(word2);
 		
 		genState = genState.apply(rule);
 		

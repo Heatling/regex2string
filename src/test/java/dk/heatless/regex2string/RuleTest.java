@@ -80,7 +80,7 @@ public class RuleTest {
 	}
 	
 	@Test
-	public void testApplicationResultSuccess(){
+	public void testgenerateSuccess(){
 		/*
 		 * Test applicatoinResult() where both conditions succeed
 		 */
@@ -96,26 +96,26 @@ public class RuleTest {
 		String result = "generated string";
 		mockGenReturnsForState(mockState, result);
 		
-		assertEquals(r.applicationResult(mockState), result);
+		assertEquals(r.generate(mockState), result);
 		
 	}
 
 	@Test
-	public void testApplicationResultPreconditionFail(){
+	public void testgeneratePreconditionFail(){
 		/*
-		 * Test applicationResult() where the precondition fails
+		 * Test generate() where the precondition fails
 		 */
 		GenerationState mockState = mock(GenerationState.class);
 		
 		mockPreAcceptsState(mockState, false);
 		
-		assertEquals(r.applicationResult(mockState), null);
+		assertEquals(r.generate(mockState), null);
 	}
 	
 	@Test
-	public void testApplicationResultPostconditionFail(){
+	public void testgeneratePostconditionFail(){
 		/*
-		 * Test applicationResult() where the postcondition fails
+		 * Test generate() where the postcondition fails
 		 */
 		GenerationState mockState = mock(GenerationState.class);
 		
@@ -128,13 +128,13 @@ public class RuleTest {
 		String result = "generated string";
 		mockGenReturnsForState(mockState, result);
 		
-		assertEquals(r.applicationResult(mockState), null);
+		assertEquals(r.generate(mockState), null);
 	}
 	
 	@Test
-	public void testApplicationResultGeneratorFail(){
+	public void testgenerateGeneratorFail(){
 		/*
-		 * Test applicationResult() where the generator fails to generate a string
+		 * Test generate() where the generator fails to generate a string
 		 */
 		GenerationState mockState = mock(GenerationState.class);
 		
@@ -143,7 +143,7 @@ public class RuleTest {
 		//Generator fails to generate a string
 		mockGenReturnsForState(mockState, null);
 		
-		assertEquals(r.applicationResult(mockState), null);
+		assertEquals(r.generate(mockState), null);
 	}
 	
 	
