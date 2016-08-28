@@ -3,7 +3,6 @@ package dk.heatless.regex2string.rules;
 import dk.heatless.regex2string.Generator;
 import dk.heatless.regex2string.Condition;
 import dk.heatless.regex2string.GenerationState;
-import dk.heatless.regex2string.Generator;
 
 /**
  * Specifies a {@link String} generation rule.<br>
