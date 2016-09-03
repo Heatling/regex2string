@@ -15,6 +15,7 @@ import dk.heatless.regex2string.generators.StaticStringGenerator;
 import dk.heatless.regex2string.rules.CompleteRegexMatchRule;
 import dk.heatless.regex2string.rules.PostfixRule;
 import dk.heatless.regex2string.rules.PrefixRule;
+import dk.heatless.regex2string.rules.PriorityGenerator;
 import dk.heatless.regex2string.rules.Rule;
 import dk.heatless.regex2string.utilities.StateOperations;
 
@@ -41,5 +42,14 @@ public class Features {
 		GenerationState gen = StateOperations.getInitialGenerationState(new RegExp("(\\[|\\{)something(\\]|\\})"));
 		
 		assertEquals(g.generate(gen), "{something}");
+	}
+
+	@Test
+	public void t3(){
+		PriorityGenerator pG = new PriorityGenerator(Conditions.NO_CONDITION, new StaticStringGenerator("-"), Generators.MINIMAL_STRING_GENERATOR);
+		RepeatGenerator rG = new RepeatGenerator(pG);
+		GenerationState gen = StateOperations.getInitialGenerationState(new RegExp("(\\+|-) 1234 (\\+|-)"));
+		
+		assertEquals(rG.generate(gen), "- 1234 +");
 	}
 }

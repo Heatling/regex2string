@@ -235,8 +235,7 @@ public class GenerationStateTest {
 		
 		assertEquals(currentState.getLengthOfGenerated(), text.length());
 	}
-
-
+	
 
 
 

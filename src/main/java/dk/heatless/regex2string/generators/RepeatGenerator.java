@@ -31,7 +31,10 @@ public class RepeatGenerator implements Generator {
 			state = next;
 			next = state.apply(toRepeat);
 		}
-		return state.getGenerated(mark);
+		if(state != mark){
+			return state.getGenerated(mark);
+		}else{
+			return null;
+		}
 	}
-
 }
