@@ -145,6 +145,13 @@ public class GenerationState {
 		return this.currentState.isAccept();
 	}
 	
+	/**
+	 * @return
+	 *  an identical GenerationState, except that it has no previous. IE. it is a root.
+	 */
+	public GenerationState copyToRootState(){
+		return new GenerationState(this.currentState);
+	}
 //Accessors
 	/**
 	 * @return
