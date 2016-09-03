@@ -152,18 +152,8 @@ public class GenerationState {
 	public boolean completed(){
 		return this.currentState.isAccept();
 	}
+	//Accessors
 	
-	/**
-	 * @return
-	 *  an identical GenerationState, except that it has no previous. IE. it is a root.<br>
-	 *  <b>Warning</b>: Should be used carefully, since information on what has previously been generated is
-	 *  lost. Make sure that any use of the resulting state does not depend on what has been generated
-	 *  up to the call to this method.
-	 */
-	public GenerationState copyToRootState(){
-		return new GenerationState(this.currentState);
-	}
-//Accessors
 	/**
 	 * @return
 	 * The state of the {@link RegExp regular expression} {@link Automaton} if the {@link String} generated

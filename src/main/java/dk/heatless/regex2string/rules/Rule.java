@@ -72,12 +72,12 @@ public class Rule implements Generator{
 	 */
 	@Override
 	public String generate(GenerationState state){
-		GenerationState copy = state.copyToRootState();
+		GenerationState mark = state;
 		if(precondition.accept(state)){
-			GenerationState tempState = copy.apply(generator);
+			GenerationState tempState = state.apply(generator);
 			if(tempState != null){
 				if(postcondition.accept(tempState)){
-					return tempState.getGenerated();
+					return tempState.getGenerated(mark);
 				}
 			}
 		}

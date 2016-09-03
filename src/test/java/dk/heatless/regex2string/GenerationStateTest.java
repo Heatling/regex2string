@@ -236,17 +236,6 @@ public class GenerationStateTest {
 		assertEquals(currentState.getLengthOfGenerated(), text.length());
 	}
 
-	@Test
-	public void testCopyToRootState(){
-		/*
-		 * Test that copyToRootState() creates a copy with no previous
-		 */
-		GenerationState o = new GenerationState(mockState, '0', new GenerationState(mockState));
-		GenerationState c = o.copyToRootState();
-		
-		assertTrue(c.getCurrentState() == mockState);
-		assertTrue(c.getPrevious() == null);
-	}
 
 
 
