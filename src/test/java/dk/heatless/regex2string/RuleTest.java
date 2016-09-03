@@ -2,6 +2,7 @@ package dk.heatless.regex2string;
 
 import org.testng.annotations.*;
 
+import dk.brics.automaton.State;
 import dk.heatless.regex2string.rules.Rule;
 
 import static org.mockito.Mockito.*;
@@ -84,7 +85,7 @@ public class RuleTest {
 		/*
 		 * Test applicatoinResult() where both conditions succeed
 		 */
-		GenerationState mockState = mockGenerationStateThatAcceptsAnythingAndReturnsItself();
+		GenerationState mockState = mockGenerationStateThatAcceptsAnything();
 		
 		//precondition must accept the current state
 		mockPreAcceptsState(mockState, true);
@@ -94,7 +95,7 @@ public class RuleTest {
 		
 		//Generator successfully generates a string from the initial state
 		String result = "generated string";
-		mockGenReturnsForState(mockState, result);
+		mockGenReturnsForState(any(GenerationState.class), result);
 		
 		assertEquals(r.generate(mockState), result);
 		
@@ -117,7 +118,7 @@ public class RuleTest {
 		/*
 		 * Test generate() where the postcondition fails
 		 */
-		GenerationState mockState = mock(GenerationState.class);
+		GenerationState mockState = mockGenerationStateThatAcceptsAnything();
 		
 		mockPreAcceptsState(mockState, true);
 		
@@ -126,7 +127,7 @@ public class RuleTest {
 		
 		//Generator successfully generates a string from the initial state
 		String result = "generated string";
-		mockGenReturnsForState(mockState, result);
+		mockGenReturnsForState(any(GenerationState.class), result);
 		
 		assertEquals(r.generate(mockState), null);
 	}
@@ -136,12 +137,12 @@ public class RuleTest {
 		/*
 		 * Test generate() where the generator fails to generate a string
 		 */
-		GenerationState mockState = mock(GenerationState.class);
+		GenerationState mockState = mockGenerationStateThatAcceptsAnything();
 		
 		mockPreAcceptsState(mockState, true);
 		
 		//Generator fails to generate a string
-		mockGenReturnsForState(mockState, null);
+		mockGenReturnsForState(any(GenerationState.class), null);
 		
 		assertEquals(r.generate(mockState), null);
 	}
@@ -162,10 +163,10 @@ public class RuleTest {
 		when(mockGen.generate(state)).thenReturn(toReturn);
 	}
 
-	public GenerationState mockGenerationStateThatAcceptsAnythingAndReturnsItself(){
-		GenerationState g = mock(GenerationState.class);
-		when(g.step(any(String.class))).thenReturn(g);
-		when(g.step(null)).thenReturn(g);
+	public GenerationState mockGenerationStateThatAcceptsAnything(){
+		State mockState = mock(State.class);
+		GenerationState g = new GenerationState(mockState);
+		when(mockState.step(anyChar())).thenReturn(mockState);
 		return g;
 	}
 

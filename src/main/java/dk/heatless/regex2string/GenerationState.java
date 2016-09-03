@@ -97,6 +97,10 @@ public class GenerationState {
 	 * If the rule cannot be applied to the state, {@code null} is returned.
 	 */
 	public GenerationState apply(Generator generator) {
+		if(generator == null){
+			throw new IllegalArgumentException("Generator was null");
+		}
+		
 		String result = generator.generate(this);
 		if(result != null){
 			return step(result);
@@ -113,6 +117,10 @@ public class GenerationState {
 	 * If the string cannot be applied to the state, {@code null} is returned.
 	 */
 	public GenerationState step(String text) {
+		if(text == null){
+			throw new IllegalArgumentException("String was null");
+		}
+		
 		GenerationState newState = this;
 		for(int i = 0; i<text.length() && newState != null; i++){
 			newState = newState.step(text.charAt(i));

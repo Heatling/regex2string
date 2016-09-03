@@ -63,7 +63,20 @@ public class GenerationStateTest {
 		assertTrue(genState.getCurrentState() == mockState);
 		assertEquals(genState.getPrevious(), null);
 	}
-
+	
+	@Test
+	public void applyNull(){
+		/*
+		 * Test that apply() does not accept null
+		 */
+		try{
+			new GenerationState(mockState).apply(null);
+			fail("Should throw IllegalArgumentException");
+		}catch(IllegalArgumentException err){
+			assertEquals(err.getMessage(), "Generator was null");
+		}
+	}
+	
 	@Test
 	public void applyRuleSuccessful(){
 		/*
@@ -139,6 +152,19 @@ public class GenerationStateTest {
 	}
 
 	@Test
+	public void stepStringNull(){
+		/*
+		 * Test that step(String) does not accept null
+		 */
+		try{
+			new GenerationState(mockState).step(null);
+			fail("Should throw IllegalArgumentException");
+		}catch(IllegalArgumentException err){
+			assertEquals(err.getMessage(), "String was null");
+		}
+	}
+	
+	@Test
 	public void applyStringSuccess(){
 		/*
 		 * Test can apply a valid string directly
@@ -210,7 +236,17 @@ public class GenerationStateTest {
 		assertEquals(currentState.getLengthOfGenerated(), text.length());
 	}
 
-
+	@Test
+	public void testCopyToRootState(){
+		/*
+		 * Test that copyToRootState() creates a copy with no previous
+		 */
+		GenerationState o = new GenerationState(mockState, '0', new GenerationState(mockState));
+		GenerationState c = o.copyToRootState();
+		
+		assertTrue(c.getCurrentState() == mockState);
+		assertTrue(c.getPrevious() == null);
+	}
 
 
 
