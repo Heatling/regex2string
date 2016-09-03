@@ -155,7 +155,10 @@ public class GenerationState {
 	
 	/**
 	 * @return
-	 *  an identical GenerationState, except that it has no previous. IE. it is a root.
+	 *  an identical GenerationState, except that it has no previous. IE. it is a root.<br>
+	 *  <b>Warning</b>: Should be used carefully, since information on what has previously been generated is
+	 *  lost. Make sure that any use of the resulting state does not depend on what has been generated
+	 *  up to the call to this method.
 	 */
 	public GenerationState copyToRootState(){
 		return new GenerationState(this.currentState);
@@ -171,13 +174,26 @@ public class GenerationState {
 	}
 	
 	/**
+	 * Is identical to {@link #getGenerated(GenerationState) getGenerated(null)}.
 	 * @return
 	 * The {@link String} value that was generated to get to this generation state.
 	 * If this generation state is the {@link Automaton#getInitialState initial state}, the value of this string
 	 * is not part of the final generated string.
 	 */
 	public String getGenerated(){
-		return getGeneratedWithPrevious(new StringBuilder());
+		return getGenerated(null);
+	}
+	
+	/**
+	 * @param limit
+	 * if {@code null} there is no limit
+	 * @return
+	 * The {@link String} value that was generated to get to this generation state from the limit state.
+	 * If this generation state is the {@link Automaton#getInitialState initial state}, the value of this string
+	 * is not part of the final generated string.
+	 */
+	public String getGenerated(GenerationState limit){
+		return getGeneratedWithPrevious(new StringBuilder(), limit);
 	}
 	
 	/**
@@ -216,15 +232,15 @@ public class GenerationState {
 	 * @return
 	 * The complete string that was run on the regex automaton to result in this generation state.
 	 */
-	private String getGeneratedWithPrevious(StringBuilder result){
-		if(previous == null){
-			//This is the root state
+	private String getGeneratedWithPrevious(StringBuilder result, GenerationState limit){
+		if(this == limit || previous == null){
+			//This is the root state or limit
 			result.reverse();
 			return result.toString();
 		}else{
 			//not the root
 			result.append(this.stepChar);
-			return this.previous.getGeneratedWithPrevious(result);
+			return this.previous.getGeneratedWithPrevious(result, limit);
 		}
 	}
 	

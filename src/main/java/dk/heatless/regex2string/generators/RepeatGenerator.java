@@ -25,13 +25,13 @@ public class RepeatGenerator implements Generator {
 	 */
 	@Override
 	public String generate(GenerationState state) {
-		state = state.copyToRootState();
+		GenerationState mark = state;
 		GenerationState next = state.apply(toRepeat);
 		while(next != null){
 			state = next;
 			next = state.apply(toRepeat);
 		}
-		return state.getGenerated();
+		return state.getGenerated(mark);
 	}
 
 }
