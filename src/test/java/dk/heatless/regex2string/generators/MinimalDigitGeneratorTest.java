@@ -4,28 +4,26 @@ import static org.mockito.Mockito.*;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import static org.testng.Assert.*;
 
+import static org.testng.Assert.*;
 import dk.brics.automaton.State;
 import dk.brics.automaton.Transition;
 import dk.heatless.regex2string.GenerationState;
+import dk.heatless.regex2string.TestUtilities;
 
 public class MinimalDigitGeneratorTest {
 	
-	
-	MinimalDigitGenerator g;
+//Fields
+	MinimalDigitGenerator g = new MinimalDigitGenerator();
 	GenerationState genState;
-	State initState, mockState ;
-	@BeforeMethod
-	public void setup(){
-		
-		g = new MinimalDigitGenerator();
-
-		
-		mockState = mock(State.class);
-		initState = new State();
-		genState = new GenerationState(initState);
+	
+//methods
+	public void assertSequence(char start, char end, String result){
+		genState = TestUtilities.getGenerationStateFor("["+start+"-"+end+"]");
+		assertEquals(g.generate(genState), result);
 	}
+	
+//Test
 	
 	@Test
 	public void generateFromSequence1(){
@@ -80,11 +78,7 @@ public class MinimalDigitGeneratorTest {
 		assertSequence('A','q', null);
 	}
 	
-	public void assertSequence(char start, char end, String result){
-		Transition t = new Transition(start, end , mockState);
-		initState.addTransition(t);
-		assertEquals(g.generate(genState), result);
-	}
+	
 	
 	
 	

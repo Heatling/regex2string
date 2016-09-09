@@ -8,34 +8,28 @@ import org.testng.annotations.*;
 import dk.brics.automaton.State;
 import dk.brics.automaton.Transition;
 import dk.heatless.regex2string.GenerationState;
-
+import dk.heatless.regex2string.TestUtilities;
 import static org.testng.Assert.*;
-
 import static org.mockito.Mockito.*;
 
 public class RandomCharacterGeneratorTest {
 	
 	Random mockRandom ;
 	RandomCharacterGenerator g ;
-	State mockState ;
 	GenerationState genState ;
 	
 	@BeforeMethod
 	public void setup(){
 		mockRandom = mock(Random.class);
 		g = new RandomCharacterGenerator(mockRandom);
-		mockState = mock(State.class);
-		genState = new GenerationState(mockState);
 	}
 	
 	@Test
 	public void noTransitionsTest(){
 		/*
-		 * Test that if the state has no outgoing transitions, null is returned.
+		 * Test that if the state does not accept anything, null is returned.
 		 */
-		when(mockRandom.nextInt(anyInt())).thenCallRealMethod();
-		when(mockState.getTransitions()).thenReturn(new HashSet<Transition>());
-		
+		genState = TestUtilities.getGenerationStateFor("");
 		assertEquals(g.generate(genState), null);
 	}
 	
@@ -45,12 +39,9 @@ public class RandomCharacterGeneratorTest {
 		 * Test that if the state has 1 transition, which can choose between multiple chars,
 		 * then the chars are chosen randomly
 		 */
-		HashSet<Transition> s = new HashSet<Transition>();
-		s.add(new Transition('0', '9', mockState));
-		when(mockState.getTransitions()).thenReturn(s);
 		when(mockRandom.nextInt('9'-'0')).thenReturn(3);
-		when(mockState.step('3')).thenReturn(mockState);
 		
+		genState = TestUtilities.getGenerationStateFor("[0-9]");
 		assertEquals(g.generate(genState), "3");
 	}
 	
@@ -60,12 +51,9 @@ public class RandomCharacterGeneratorTest {
 		 * Test that if the state has 1 transition, which only has 1 char to choose from, that
 		 * char is returned
 		 */
-		HashSet<Transition> s = new HashSet<Transition>();
-		s.add(new Transition('0', '0', mockState));
-		when(mockState.getTransitions()).thenReturn(s);
 		when(mockRandom.nextInt(1)).thenReturn(0);
-		when(mockState.step('0')).thenReturn(mockState);
 		
+		genState = TestUtilities.getGenerationStateFor("0");
 		assertEquals(g.generate(genState), "0");
 	}
 }

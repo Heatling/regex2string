@@ -8,31 +8,19 @@ import org.testng.annotations.*;
 import dk.brics.automaton.State;
 import dk.brics.automaton.Transition;
 import dk.heatless.regex2string.GenerationState;
+import dk.heatless.regex2string.TestUtilities;
 
 public class MinimalCharacterGeneratorTest {
 	
-	MinimalCharacterGenerator g;
+	MinimalCharacterGenerator g = new MinimalCharacterGenerator();
 	GenerationState genState;
-	State initState, mockState ;
-	@BeforeMethod
-	public void setup(){
-		
-		g = new MinimalCharacterGenerator();
-
-		
-		mockState = mock(State.class);
-		initState = new State();
-		genState = new GenerationState(initState);
-	}
 	
 	@Test
 	public void generateFromSingleSequence(){
 		/*
 		 * Test that if the state accepts 1 sequence, the minimum is returned.
 		 */
-		Transition t = new Transition('a', 'z', mockState);
-		initState.addTransition(t);
-		
+		genState = TestUtilities.getGenerationStateFor("[a-z]");
 		String result = g.generate(genState);
 		
 		assertEquals(result, "a");
@@ -43,8 +31,7 @@ public class MinimalCharacterGeneratorTest {
 		/*
 		 * Test that if the state accepts 2 sequences, the minimum of the two is chosen.
 		 */
-		initState.addTransition(new Transition('B', 'R', mockState));
-		initState.addTransition(new Transition('a', 'c', mockState));
+		genState = TestUtilities.getGenerationStateFor("([B-R]|[a-c])");
 		
 		String result = g.generate(genState);
 		
@@ -54,9 +41,9 @@ public class MinimalCharacterGeneratorTest {
 	@Test
 	public void generateFromNoTransitions(){
 		/*
-		 * Test that if a state has no outgoing transitions, null is returned
+		 * Test that if a state accepts no string
 		 */
-		
+		genState = TestUtilities.getGenerationStateFor("");
 		assertEquals(g.generate(genState), null);
 	}
 	

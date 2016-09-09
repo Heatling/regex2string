@@ -1,40 +1,28 @@
 package dk.heatless.regex2string.generators;
 
+import dk.heatless.regex2string.Conditions;
 import dk.heatless.regex2string.GenerationState;
 import dk.heatless.regex2string.Generator;
 
 /**
- * A generator that uses another generator repeatedly to generate a string.
+ * A generator that uses another generator repeatedly to generate a string.<br>
+ * The loop terminates when the generator is unable to generate a string. The result
+ * is a concatenation of the previous iteration's generation.
+ * 
+ * @see
+ * {@link WhileGenerator}, {@link Conditions#NO_CONDITION}
  */
-public class RepeatGenerator implements Generator {
+public class RepeatGenerator extends WhileGenerator {
 	
-	private Generator toRepeat;
+//Fields
 	
+//Constructors
 	/**
 	 * Constructs a generator that uses the given generator to repeatedly
 	 * to generate a string.
 	 * @param toRepeat
 	 */
 	public RepeatGenerator(Generator toRepeat) {
-		this.toRepeat = toRepeat;
-	}
-	
-	/**
-	 * Uses the given generator to repeatedly generate substrings, then returns 
-	 * the concatenated result.
-	 */
-	@Override
-	public String generate(GenerationState state) {
-		GenerationState mark = state;
-		GenerationState next = state.apply(toRepeat);
-		while(next != null){
-			state = next;
-			next = state.apply(toRepeat);
-		}
-		if(state != mark){
-			return state.getGenerated(mark);
-		}else{
-			return null;
-		}
+		super(Conditions.NO_CONDITION, toRepeat);
 	}
 }

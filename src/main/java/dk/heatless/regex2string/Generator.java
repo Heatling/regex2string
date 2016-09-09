@@ -10,7 +10,7 @@ public interface Generator {
 	 * @param state
 	 * to step
 	 * @return 
-	 * a {@link String} that the given generation state can {@link GenerationState#step(String) step}, otherwise {@code null}.
+	 * a non-empty {@link String} that the given generation state can {@link GenerationState#step(String) step}, otherwise {@code null}.
 	 */
 	public String generate(GenerationState state);
 }

@@ -42,7 +42,7 @@ public class ConditionsTest {
 	}
 
 	@Test
-	public void No_CONDITION_success(){
+	public void NO_CONDITION_success(){
 		/*
 		 * Test that NO_CONDITION condition accepts any state
 		 */
