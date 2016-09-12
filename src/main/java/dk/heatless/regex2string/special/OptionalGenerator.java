@@ -30,14 +30,30 @@ import dk.heatless.regex2string.Generator;
 public class OptionalGenerator implements Generator {
 
 //Fields
+	/**
+	 * The generator to use.
+	 */
 	private Generator option;
 	
 //Constructors
-	
+	/**
+	 * Constructs a generator that uses the given generator to generate a string.<br>
+	 * If the given generator cannot generate a string, an empty string is returned.<br>
+	 * <b>Use with caution.</b>
+	 * @param option
+	 */
 	public OptionalGenerator(Generator option){
+		if(option == null){
+			throw new IllegalArgumentException("Generator was null");
+		}
 		this.option = option;
 	}
 	
+	/**
+	 * Returns what the given generator generates, or, if it fails, returns an empty string.<br>
+	 * <b>Use with caution.</b>
+	 * 
+	 */
 	@Override
 	public String generate(GenerationState state) {
 		String temp = option.generate(state);
