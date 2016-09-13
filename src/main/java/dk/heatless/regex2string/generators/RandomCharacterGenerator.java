@@ -12,19 +12,44 @@ import dk.heatless.regex2string.Generator;
  */
 public class RandomCharacterGenerator implements Generator{
 	
+//Fields
+	
+	/**
+	 * Number generator
+	 */
 	private Random r;
 	
+//Constructors
+	
+	/**
+	 * Constructs a generator that generates a random valid character.<br>
+	 * For randomness {@link Random} is used.<br>
+	 * <br>
+	 * Is equivalent to {@code new RandomCharacterGenerator(new Random())}
+	 */
 	public RandomCharacterGenerator(){
 		this(new Random());
 	}
 	
+	/**
+	 * Constructos a generator that generates a random valid character.<br>
+	 * 
+	 * @param r
+	 * Used for randomness.
+	 */
 	public RandomCharacterGenerator(Random r){
 		this.r = r;
 	}
 	
+//methods
+	
+	/**
+	 * Generates a random valid character.
+	 */
 	@Override
-	public String generate(GenerationState state) {
+	public GenerationState generate(GenerationState state) {
 		Set<Transition> transitions = state.getCurrentState().getTransitions();
+		char result;
 		
 		if(transitions.size() != 0){
 			int tempR = r.nextInt(transitions.size());
@@ -33,10 +58,11 @@ public class RandomCharacterGenerator implements Generator{
 				if(i == tempR){
 					if(t.getMin() != t.getMax()){
 						tempR = r.nextInt(t.getMax() - t.getMin());
-						return Character.toString((char)(t.getMin() + tempR));
+						result = (char)(t.getMin() + tempR);
 					}else{
-						return Character.toString(t.getMin());
+						result =  t.getMin();
 					}
+					return state.step(result);
 				}else{
 					i++;
 				}

@@ -75,7 +75,7 @@ public class WhileGeneratorTest {
 		
 		WhileGenerator g = new WhileGenerator(mockC, mockG);
 		
-		assertEquals(g.generate(genState), "Yes");
+		assertEquals(g.generate(genState).getGenerated(), "Yes");
 	}
 	
 	@Test
@@ -90,7 +90,7 @@ public class WhileGeneratorTest {
 		
 		WhileGenerator g = new WhileGenerator(mockC, mockG);
 		
-		assertEquals(g.generate(genState), "Yes");
+		assertEquals(g.generate(genState).getGenerated(), "Yes");
 	}
 	
 	@Test
@@ -104,7 +104,7 @@ public class WhileGeneratorTest {
 		
 		WhileGenerator g = new WhileGenerator(mockC, mockG);
 		
-		assertEquals(g.generate(genState), "YesYes");
+		assertEquals(g.generate(genState).getGenerated(), "YesYes");
 	}
 	
 	@Test
@@ -126,7 +126,7 @@ public class WhileGeneratorTest {
 		
 		WhileGenerator g = new WhileGenerator(mockC, mockG);
 		
-		assertEquals(g.generate(genState), "YesYes");
+		assertEquals(g.generate(genState).getGenerated(), "YesYes");
 	}
 	
 	@Test
@@ -140,7 +140,7 @@ public class WhileGeneratorTest {
 		
 		WhileGenerator g = new WhileGenerator(mockC, mockG);
 		
-		assertEquals(g.generate(genState), "YesYes");
+		assertEquals(g.generate(genState).getGenerated(), "YesYes");
 	}	
 	
 	@Test
@@ -154,6 +154,6 @@ public class WhileGeneratorTest {
 		
 		WhileGenerator g = new WhileGenerator(mockC, mockG);
 		
-		assertEquals(g.generate(genState), "YesYesYes");
+		assertEquals(g.generate(genState).getGenerated(), "YesYesYes");
 	}
 }

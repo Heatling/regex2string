@@ -1,8 +1,9 @@
 package dk.heatless.regex2string.generators;
 
 import dk.heatless.regex2string.GenerationState;
+import dk.heatless.regex2string.Generator;
 
-public class DynamicStringGenerator extends VerifiedGenerator{
+public class DynamicStringGenerator implements Generator{
 	
 //Fields
 	private String toGenerate = null;
@@ -10,8 +11,8 @@ public class DynamicStringGenerator extends VerifiedGenerator{
 //Methods
 	
 	@Override
-	protected String generateUnverified(GenerationState state) {
-		return toGenerate;
+	public GenerationState generate(GenerationState state) {
+		return state.step(toGenerate);
 	}
 	
 //Accessors and mutators

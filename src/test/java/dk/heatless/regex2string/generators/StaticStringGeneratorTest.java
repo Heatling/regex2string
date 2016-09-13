@@ -12,6 +12,25 @@ import dk.heatless.regex2string.TestUtilities;
 public class StaticStringGeneratorTest {
 	
 	@Test
+	public void initTest(){
+		/*
+		 * Test that the constructor does not take null or the empty string
+		 */
+		try{
+			new StaticStringGenerator(null);
+			fail("Should throw IllegalArgumentException");
+		}catch(IllegalArgumentException err){
+			assertEquals(err.getMessage(), "String was null");
+		}
+		try{
+			new StaticStringGenerator("");
+			fail("Should throw IllegalArgumentException");
+		}catch(IllegalArgumentException err){
+			assertEquals(err.getMessage(), "String was empty");
+		}
+	}
+	
+	@Test
 	public void success(){
 		/*
 		 * Test that given a valid string, the generator will generate it.
@@ -21,7 +40,7 @@ public class StaticStringGeneratorTest {
 		
 		Generator g = new StaticStringGenerator(text);
 		
-		assertEquals(g.generate(mockG), text);
+		assertEquals(g.generate(mockG).getGenerated(), text);
 	}
 	
 	@Test

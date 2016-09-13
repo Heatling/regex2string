@@ -101,11 +101,7 @@ public class GenerationState {
 			throw new IllegalArgumentException("Generator was null");
 		}
 		
-		String result = generator.generate(this);
-		if(result != null){
-			return step(result);
-		}
-		return null;
+		return generator.generate(this);
 	}
 	
 	/**
@@ -113,12 +109,13 @@ public class GenerationState {
 	 * @param text
 	 * to try to step with.
 	 * @return
-	 * The generation state that was the result of a successful application of the given {@link String}.<br>
-	 * If the string cannot be applied to the state, {@code null} is returned.
+	 * The generation state that was the result of a successful stepping of the given {@link String}.<br>
+	 * If the string cannot be applied to the state, it is {@code null}, or empty, {@code null} is returned.
 	 */
 	public GenerationState step(String text) {
-		if(text == null){
-			throw new IllegalArgumentException("String was null");
+		if(	text == null ||
+			text.length() == 0	){
+			return null;
 		}
 		
 		GenerationState newState = this;

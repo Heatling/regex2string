@@ -27,7 +27,7 @@ public class MinimalCharacterGenerator implements Generator{
 	}
 	
 	@Override
-	public String generate(GenerationState state) {
+	public GenerationState generate(GenerationState state) {
 		Set<Transition> transitions = state.getCurrentState().getTransitions();
 		List<Character> minChars = new ArrayList<Character>();
 		for(Transition t : transitions){
@@ -43,7 +43,7 @@ public class MinimalCharacterGenerator implements Generator{
 			
 		});
 		
-		return minChars.size()>0? Character.toString(minChars.get(0)) :null;
+		return minChars.size()>0? state.step(minChars.get(0)) :null;
 	}
 
 }

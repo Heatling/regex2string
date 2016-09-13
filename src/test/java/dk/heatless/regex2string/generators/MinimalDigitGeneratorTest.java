@@ -20,7 +20,12 @@ public class MinimalDigitGeneratorTest {
 //methods
 	public void assertSequence(char start, char end, String result){
 		genState = TestUtilities.getGenerationStateFor("["+start+"-"+end+"]");
-		assertEquals(g.generate(genState), result);
+		if(result == null){
+			assertEquals(g.generate(genState), null);
+		}else{
+			assertEquals(g.generate(genState).getGenerated(), result);
+		}
+		
 	}
 	
 //Test

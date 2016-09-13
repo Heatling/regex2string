@@ -12,13 +12,21 @@ import dk.heatless.regex2string.rules.Rule;
 import dk.heatless.regex2string.utilities.StateOperations;
 
 public class GenerationStateTest {
-	
+
+//Fields
 	State mockState;
 	GenerationState genState;
 	Rule rule;
 	
+//methods
+	
+	public State getInitialStateOfRegex(String regex){
+		return (new RegExp(regex)).toAutomaton().getInitialState();
+	}
+	
+	
 	@BeforeMethod
-	public void setupTest(){
+	public void setup(){
 		
 		mockState = mock(State.class);
 		when(mockState.step(anyChar())).thenReturn(mockState);
@@ -35,6 +43,7 @@ public class GenerationStateTest {
 		assertFalse(genState.completed());
 		assertEquals(genState.getGenerated(), "");
 	}
+	
 	@Test
 	public void nullTest(){
 		/*
@@ -78,126 +87,111 @@ public class GenerationStateTest {
 	}
 	
 	@Test
-	public void applyRuleSuccessful(){
+	public void applySuccessful(){
 		/*
-		 * Test that can apply a rule that succeeds
+		 * Test that can apply success
 		 */
+		String string = "Correct";
+		State startState = getInitialStateOfRegex(string);
+		State endState = StateOperations.stringStep(startState, string);
+		GenerationState genState = new GenerationState(startState);
+				
+		assertTrue(genState.getCurrentState() == startState);
 		
-		
-		String result = "generated string";
-		Automaton regex = (new RegExp(result + "some more")).toAutomaton();
-		mockState = regex.getInitialState();
-		State endState = StateOperations.stringStep(mockState, result);
-		genState = new GenerationState(mockState);
-		
-		
-		when(rule.generate(genState)).thenReturn(result);
-		
-		genState = genState.apply(rule);
-		
-		assertNotEquals(genState, null);
-		
-		assertEquals(genState.getGenerated(), "generated string");
-		assertTrue(genState.getCurrentState() == endState);
+		Generator generator = TestUtilities.getGenerator(string);
+		GenerationState resultState = genState.apply(generator);
+
+		assertEquals(resultState.getGenerated(), string);
+		assertTrue(resultState.getCurrentState() == endState);
 	}
 
 	@Test
-	public void applyRuleUnsuccessfully(){
+	public void applyUnsuccessfully(){
 		/*
-		 * Test that if the rule does not accept the state, then nothing is generated
+		 * Test that if the generator does not generate the correct string, then nothing is generated
 		 */
+		String string = "Correct";
+		State startState = getInitialStateOfRegex(string);
+		GenerationState genState = new GenerationState(startState);
+				
+		assertTrue(genState.getCurrentState() == startState);
 		
-		String result = "generated string";
-		Automaton regex = (new RegExp(result + "some more")).toAutomaton();
-		mockState = regex.getInitialState();
-		genState = new GenerationState(mockState);
-		
-		when(rule.generate(genState)).thenReturn(null);
-		
-		
-		
-		assertEquals(genState.apply(rule), null);
-		
-		assertEquals(genState.getGenerated(), "");
-		assertTrue(genState.getCurrentState() == mockState);
+		Generator generator = TestUtilities.getGenerator("Wrong");
+		GenerationState resultState = genState.apply(generator);
+
+		assertEquals(resultState, null);
 	}
 
 	@Test
 	public void applyRuleMultipleTimes(){
 		/*
-		 * Test can call applyRule() multiple times, and the result is a summation
+		 * Test can call apply multiple times, and the result is a summation
 		 */
 		String 	word1 = "generated ", 
 				word2 = "string", 
 				result = word1+word2;
 		
-		when(rule.generate(genState)).thenReturn(word1);
+		Generator generator1 = TestUtilities.getGenerator(word1);
+		Generator generator2 = TestUtilities.getGenerator(word2);
 		
-		genState = genState.apply(rule);
+		State startState = getInitialStateOfRegex(result);
+		GenerationState startGenState = new GenerationState(startState);
 		
-		assertEquals(genState.getGenerated(), word1);
+		//1. apply
+		GenerationState midGenState = startGenState.apply(generator1);
+		assertEquals(midGenState.getGenerated(), word1);
 		
-		when(rule.generate(genState)).thenReturn(null);
-		
-		assertEquals(genState.apply(rule), null);
-		assertEquals(genState.getGenerated(), word1);
-		
-		when(rule.generate(genState)).thenReturn(word2);
-		
-		genState = genState.apply(rule);
-		
-		assertNotEquals(genState, null);
-		assertEquals(genState.getGenerated(), result);
-		
+		//2. apply
+		GenerationState endGenState = midGenState.apply(generator2);
+		assertEquals(endGenState.getGenerated(), result);		
 	}
 
 	@Test
 	public void stepStringNull(){
 		/*
-		 * Test that step(String) does not accept null
+		 * Test that step(String) returns null if given null
 		 */
-		try{
-			new GenerationState(mockState).step(null);
-			fail("Should throw IllegalArgumentException");
-		}catch(IllegalArgumentException err){
-			assertEquals(err.getMessage(), "String was null");
-		}
+		
+		assertEquals(new GenerationState(mockState).step(null), null);
 	}
 	
 	@Test
-	public void applyStringSuccess(){
+	public void stepStringEmpty(){
 		/*
-		 * Test can apply a valid string directly
+		 * Test that step(String) returns null if given an empty string
 		 */
-		String result = "bleh";
-		Automaton regex = (new RegExp(result + "some more")).toAutomaton();
-		mockState = regex.getInitialState();
-		State endState = StateOperations.stringStep(mockState, result);
-		genState = new GenerationState(mockState);
 		
-		genState = genState.step(result);
+		assertEquals(new GenerationState(mockState).step(""), null);
+	}
+	
+	@Test
+	public void stepStringSuccess(){
+		/*
+		 * Test can step a valid string directly
+		 */
+		String string = "Correct";
+		State startState = getInitialStateOfRegex(string);
+		State endState = StateOperations.stringStep(startState, string);
+		GenerationState genState = new GenerationState(startState);
 		
-		assertNotEquals(genState, null);
+		genState = genState.step(string);
 		
-		assertEquals(genState.getGenerated(), result);
+		assertEquals(genState.getGenerated(), string);
 		assertTrue(genState.getCurrentState() == endState);
 	}
 
 	@Test
-	public void applyStringFailure(){
+	public void stepStringFailure(){
 		/*
-		 * Test will not apply an invalid string directly
+		 * Test will not step an invalid string directly
 		 */
-		String correctString = "bleh";
-		String wrongString = "wrong";
-		Automaton regex = (new RegExp(correctString + "some more")).toAutomaton();
-		mockState = regex.getInitialState();
-		genState = new GenerationState(mockState);
+		String string = "Correct";
+		State startState = getInitialStateOfRegex(string);
+		GenerationState genState = new GenerationState(startState);
 		
-		assertEquals(genState.step(wrongString), null);
+		genState = genState.step("Wrong");
 		
-		assertEquals(genState.getGenerated(), "");
-		assertTrue(genState.getCurrentState() == mockState);
+		assertEquals(genState, null);
 	}
 	
 	@Test
@@ -227,8 +221,7 @@ public class GenerationStateTest {
 		/*
 		 * Test that getLengthOfGenerated return the correct length
 		 */
-		GenerationState currentState = new GenerationState(mockState);
-		when(mockState.step(anyChar())).thenReturn(mockState);
+		GenerationState currentState = new GenerationState(getInitialStateOfRegex("(.)*"));
 		
 		String text = "some string";
 		currentState = currentState.step(text);
@@ -236,9 +229,27 @@ public class GenerationStateTest {
 		assertEquals(currentState.getLengthOfGenerated(), text.length());
 	}
 	
+	@Test
+	public void stepCharCorrect(){
+		/*
+		 * Test that step(char) returns the correct generation state if the 
+		 * char is valid
+		 */
+		GenerationState start = TestUtilities.getGenerationStateFor("a");
+		
+		assertEquals(start.step('a').getGenerated(), "a");
+	}
 
-
-
+	@Test
+	public void stepCharWrong(){
+		/*
+		 * Test that step(char) returns the null if the 
+		 * char is invalid
+		 */
+		GenerationState start = TestUtilities.getGenerationStateFor("a");
+		
+		assertEquals(start.step('b'), null);
+	}
 
 
 

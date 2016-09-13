@@ -10,9 +10,19 @@ import dk.brics.automaton.Transition;
  */
 public class MinimalDigitGenerator extends MinimalCharacterGenerator {
 
+//Fields
+	/**
+	 * Smallest ASCII digit.
+	 */
 	public static final char SMALLEST_DIGIT = '0';
+	/**
+	 * Largest ASCII digit.
+	 */
 	public static final char LARGEST_DIGIT = '9';
 	
+//Constructors
+	
+//methods
 	@Override 
 	protected boolean getMinimal(Transition t, List<Character> addTo){
 		char 	tMin = t.getMin(),
@@ -31,6 +41,4 @@ public class MinimalDigitGenerator extends MinimalCharacterGenerator {
 		}
 		return false;
 	}
-	
-	
 }

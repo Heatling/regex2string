@@ -38,7 +38,7 @@ public class OptionalGeneratorTest {
 		
 		OptionalGenerator op = new OptionalGenerator(option);
 		
-		assertEquals(op.generate(state), "Correct");
+		assertEquals(op.generate(state).getGenerated(), "Correct");
 	}
 	
 	@Test
@@ -51,6 +51,6 @@ public class OptionalGeneratorTest {
 		
 		OptionalGenerator op = new OptionalGenerator(option);
 		
-		assertEquals(op.generate(state), "");
+		assertTrue(op.generate(state) == state);
 	}
 }

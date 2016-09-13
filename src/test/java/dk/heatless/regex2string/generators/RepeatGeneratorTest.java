@@ -62,7 +62,7 @@ public class RepeatGeneratorTest {
 				
 		RepeatGenerator g = new RepeatGenerator(mockG);
 		
-		assertEquals(g.generate(genState), "Yes");
+		assertEquals(g.generate(genState).getGenerated(), "Yes");
 	}
 	
 	@Test
@@ -75,7 +75,7 @@ public class RepeatGeneratorTest {
 				
 		RepeatGenerator g = new RepeatGenerator(mockG);
 		
-		assertEquals(g.generate(genState), "Yes");
+		assertEquals(g.generate(genState).getGenerated(), "Yes");
 	}
 	
 	@Test
@@ -88,7 +88,7 @@ public class RepeatGeneratorTest {
 		
 		RepeatGenerator g = new RepeatGenerator(mockG);
 		
-		assertEquals(g.generate(genState), "YesYes");
+		assertEquals(g.generate(genState).getGenerated(), "YesYes");
 	}
 	
 	@Test
@@ -101,6 +101,6 @@ public class RepeatGeneratorTest {
 		
 		RepeatGenerator g = new RepeatGenerator(mockG);
 		
-		assertEquals(g.generate(genState), "YesYes");
+		assertEquals(g.generate(genState).getGenerated(), "YesYes");
 	}	
 }
