@@ -10,6 +10,7 @@ import dk.heatless.regex2string.Condition;
 import dk.heatless.regex2string.Conditions;
 import dk.heatless.regex2string.GenerationState;
 import dk.heatless.regex2string.Generator;
+import dk.heatless.regex2string.GeneratorWrapper;
 import dk.heatless.regex2string.Generators;
 import dk.heatless.regex2string.conditions.CanGenerateCondition;
 import dk.heatless.regex2string.conditions.DynamicCondition;
@@ -133,5 +134,51 @@ public class Features {
 		positiveIntCondition.setDependency(toGenerate);
 		intGenerator.setToGenerate(""+((toGenerate<0)? -1*toGenerate:toGenerate));
 		assertEquals(signedIntOfLengthGen.generate(gen2).getGenerated(), "-2763");
+	}
+	
+	@Test
+	public void t7(){
+		
+		DynamicCondition<Integer> positiveIntCondition = new DynamicCondition<Integer>(){
+
+			@Override
+			protected boolean acceptDependency(GenerationState state) {
+				return this.getDependency()>=0;
+			}
+			
+			
+		};
+		ConditionalGenerator signOfIntGenerator = new ConditionalGenerator(positiveIntCondition, new StaticStringGenerator("+"), new StaticStringGenerator("-"));
+		DynamicStringGenerator intGenerator = new DynamicStringGenerator();
+		
+		SequentialGenerator signedIntOfLengthGen = new SequentialGenerator(
+				new Generator[]{signOfIntGenerator,
+						new OptionalGenerator(new RepeatGenerator(new Rule(Conditions.NO_CONDITION, new CanGenerateCondition(intGenerator), new MinimalDigitGenerator()))) ,
+						intGenerator });
+		GeneratorWrapper gW = new GeneratorWrapper(signedIntOfLengthGen);
+		
+		
+		String regex1 = "(\\+|-)[0-9]{10}";
+		String regex2 = "(\\+|-)[0-9]{4}";
+		
+		int toGenerate = 23;
+		positiveIntCondition.setDependency(toGenerate);
+		intGenerator.setToGenerate(""+((toGenerate<0)? -1*toGenerate:toGenerate));
+		assertEquals(gW.generateForRegex(regex1), "+0000000023");
+		
+		toGenerate = -23;
+		positiveIntCondition.setDependency(toGenerate);
+		intGenerator.setToGenerate(""+((toGenerate<0)? -1*toGenerate:toGenerate));
+		assertEquals(gW.generateForRegex(regex1), "-0000000023");
+		
+		toGenerate = -2763;
+		positiveIntCondition.setDependency(toGenerate);
+		intGenerator.setToGenerate(""+((toGenerate<0)? -1*toGenerate:toGenerate));
+		assertEquals(gW.generateForRegex(regex1), "-0000002763");
+		
+		toGenerate = -2763;
+		positiveIntCondition.setDependency(toGenerate);
+		intGenerator.setToGenerate(""+((toGenerate<0)? -1*toGenerate:toGenerate));
+		assertEquals(gW.generateForRegex(regex2), "-2763");
 	}
 }
