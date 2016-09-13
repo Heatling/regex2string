@@ -1,16 +1,18 @@
 package dk.heatless.regex2string;
 
 /**
- * Implementing classes might be able generate {@link String Strings} that given generation states can step.<br>
- * Implementors must return {@code null} if not able to generate a such strings.
+ * Implementing classes generate characters by generating new {@link GenerationState GenerationStates} 
+ * from a given state.<br>
+ * If a generator cannot generate, {@code null} is returned.
  */
 public interface Generator {
 	
 	/**
 	 * @param state
-	 * to step
+	 * to generate from
 	 * @return 
-	 * a non-empty {@link String} that the given generation state can {@link GenerationState#step(String) step}, otherwise {@code null}.
+	 * the resulting state of the generation. The given state must be an ancestor of the resulting state.<br>
+	 * {@code null} is returned if no characters could be generated.
 	 */
-	public String generate(GenerationState state);
+	public GenerationState generate(GenerationState state);
 }

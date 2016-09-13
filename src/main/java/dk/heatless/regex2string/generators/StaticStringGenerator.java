@@ -1,11 +1,12 @@
 package dk.heatless.regex2string.generators;
 
 import dk.heatless.regex2string.GenerationState;
+import dk.heatless.regex2string.Generator;
 
 /**
  * A simple generator that always generates the same {@code String} or, if the string is not valid, {@code null}.<br>
  */
-public class StaticStringGenerator extends VerifiedGenerator {
+public class StaticStringGenerator implements Generator {
 	
 //Fields
 	/**
@@ -19,14 +20,20 @@ public class StaticStringGenerator extends VerifiedGenerator {
 	 * @param toGenerate
 	 */
 	public StaticStringGenerator(String toGenerate){
+		if(toGenerate == null){
+			throw new IllegalArgumentException("String was null");
+		}
+		if(toGenerate.length() == 0){
+			throw new IllegalArgumentException("String was empty");
+		}
 		this.toGenerate = toGenerate;
 	}
 
 //Methods
 	
 	@Override
-	protected String generateUnverified(GenerationState state) {
-		return this.toGenerate;
+	public GenerationState generate(GenerationState state) {
+		return state.step(this.toGenerate);
 	}
 	
 }

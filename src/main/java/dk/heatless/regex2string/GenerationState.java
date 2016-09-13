@@ -101,11 +101,7 @@ public class GenerationState {
 			throw new IllegalArgumentException("Generator was null");
 		}
 		
-		String result = generator.generate(this);
-		if(result != null){
-			return step(result);
-		}
-		return null;
+		return generator.generate(this);
 	}
 	
 	/**

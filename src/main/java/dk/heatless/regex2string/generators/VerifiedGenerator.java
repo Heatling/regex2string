@@ -16,13 +16,13 @@ public abstract class VerifiedGenerator implements Generator {
 	 * @return
 	 * a string that may or may not be valid for the given state.
 	 */
-	protected abstract String generateUnverified(GenerationState state);
+	protected abstract GenerationState generateUnverified(GenerationState state);
 	
 	/**
 	 * Returns a String that the given state can step.
 	 */
 	@Override
-	public final String generate(GenerationState state) {
+	public final GenerationState generate(GenerationState state) {
 		String text = generateUnverified(state);
 		return text != null ? 
 				(state.step(text)!= null)? text: null : null;
