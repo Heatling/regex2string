@@ -71,13 +71,12 @@ public class Rule implements Generator{
 	 * Returns the generation result if the pre- and postconditions are met.
 	 */
 	@Override
-	public String generate(GenerationState state){
-		GenerationState mark = state;
+	public GenerationState generate(GenerationState state){
 		if(precondition.accept(state)){
 			GenerationState tempState = state.apply(generator);
 			if(tempState != null){
 				if(postcondition.accept(tempState)){
-					return tempState.getGenerated(mark);
+					return tempState;
 				}
 			}
 		}

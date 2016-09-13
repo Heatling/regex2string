@@ -1,4 +1,4 @@
-package dk.heatless.regex2string.rules;
+package dk.heatless.regex2string.generators;
 
 import dk.heatless.regex2string.Condition;
 import dk.heatless.regex2string.GenerationState;
@@ -24,17 +24,16 @@ public class PriorityGenerator implements Generator{
 	
 //Methods
 	@Override
-	public String generate(GenerationState state){
-		String result;
+	public GenerationState generate(GenerationState state){
+		GenerationState result;
 		boolean start = selector.accept(state);
 		Generator tempR;
-		//try once for each rule
+		//try once for each generator
 		for(int i = 0; i<2; i++){
 			tempR = select(start);
 			result = tempR.generate(state);
 			if(result != null){
 				return result;
-				//Else postSelector fail, try other one.
 			}
 			//Else generator inapplicable, try the other one.
 			start = !start;

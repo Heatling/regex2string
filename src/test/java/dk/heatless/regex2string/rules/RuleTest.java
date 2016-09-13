@@ -1,8 +1,12 @@
-package dk.heatless.regex2string;
+package dk.heatless.regex2string.rules;
 
 import org.testng.annotations.*;
 
 import dk.brics.automaton.State;
+import dk.heatless.regex2string.Condition;
+import dk.heatless.regex2string.GenerationState;
+import dk.heatless.regex2string.Generator;
+import dk.heatless.regex2string.TestUtilities;
 import dk.heatless.regex2string.rules.Rule;
 
 import static org.mockito.Mockito.*;
@@ -83,22 +87,21 @@ public class RuleTest {
 	@Test
 	public void testgenerateSuccess(){
 		/*
-		 * Test applicatoinResult() where both conditions succeed
+		 * Test generate() where both conditions succeed
 		 */
-		GenerationState mockState = mockGenerationStateThatAcceptsAnything();
+		GenerationState mockState = TestUtilities.getGenerationStateAcceptingAnything();
 		
 		//precondition must accept the current state
-		mockPreAcceptsState(mockState, true);
-		
+		Condition 	preCon = TestUtilities.getConditionAccepting(mockState),
 		//Postcondition accepts any resulting state
-		mockPostAcceptsState(any(GenerationState.class), true);
+		postCon = TestUtilities.getConditionAcceptingAnythingBut(null);
 		
 		//Generator successfully generates a string from the initial state
 		String result = "generated string";
-		mockGenReturnsForState(any(GenerationState.class), result);
+		Generator g = TestUtilities.getGenerator(result);
 		
-		assertEquals(r.generate(mockState), result);
-		
+		r = new Rule(preCon, postCon, g);
+		assertEquals(r.generate(mockState).getGenerated(), result);	
 	}
 
 	@Test
@@ -106,11 +109,20 @@ public class RuleTest {
 		/*
 		 * Test generate() where the precondition fails
 		 */
-		GenerationState mockState = mock(GenerationState.class);
+		GenerationState mockState = TestUtilities.getGenerationStateAcceptingAnything();
 		
-		mockPreAcceptsState(mockState, false);
+		//precondition cant accept the current state
+		Condition 	preCon = TestUtilities.getConditionAcceptingAnythingBut(mockState),
+				
+		//Postcondition accepts any resulting state
+		postCon = TestUtilities.getConditionAcceptingAnythingBut(null);
 		
-		assertEquals(r.generate(mockState), null);
+		//Generator successfully generates a string from the initial state
+		String result = "generated string";
+		Generator g = TestUtilities.getGenerator(result);
+		
+		r = new Rule(preCon, postCon, g);
+		assertEquals(r.generate(mockState), null);	
 	}
 	
 	@Test
@@ -118,18 +130,20 @@ public class RuleTest {
 		/*
 		 * Test generate() where the postcondition fails
 		 */
-		GenerationState mockState = mockGenerationStateThatAcceptsAnything();
+		GenerationState mockState = TestUtilities.getGenerationStateAcceptingAnything();
 		
-		mockPreAcceptsState(mockState, true);
-		
-		//Postcondition reject any resulting state
-		mockPostAcceptsState(any(GenerationState.class), false);
+		//precondition must accept the current state
+		Condition 	preCon = TestUtilities.getConditionAccepting(mockState),
+				
+		//Postcondition doesn't accept any resulting state
+		postCon = TestUtilities.getConditionAccepting(null);
 		
 		//Generator successfully generates a string from the initial state
 		String result = "generated string";
-		mockGenReturnsForState(any(GenerationState.class), result);
+		Generator g = TestUtilities.getGenerator(result);
 		
-		assertEquals(r.generate(mockState), null);
+		r = new Rule(preCon, postCon, g);
+		assertEquals(r.generate(mockState), null);	
 	}
 	
 	@Test
@@ -137,39 +151,21 @@ public class RuleTest {
 		/*
 		 * Test generate() where the generator fails to generate a string
 		 */
-		GenerationState mockState = mockGenerationStateThatAcceptsAnything();
+		GenerationState mockState = TestUtilities.getGenerationStateFor("Correct");
 		
-		mockPreAcceptsState(mockState, true);
+		//precondition must accept the current state
+		Condition 	preCon = TestUtilities.getConditionAccepting(mockState),
+				
+		//Postcondition accepts any resulting state
+		postCon = TestUtilities.getConditionAcceptingAnythingBut(null);
 		
-		//Generator fails to generate a string
-		mockGenReturnsForState(any(GenerationState.class), null);
+		//Generator fails in generating
+		Generator g = TestUtilities.getGenerator("Wrong");
 		
-		assertEquals(r.generate(mockState), null);
+		r = new Rule(preCon, postCon, g);
+		assertEquals(r.generate(mockState), null);	
 	}
 	
-	
-
-//Utility methods
-	
-	public void mockPreAcceptsState(GenerationState state, boolean accept) {
-		when(mockPre.accept(state)).thenReturn(accept);
-	}
-	
-	public void mockPostAcceptsState(GenerationState state, boolean accept) {
-		when(mockPost.accept(state)).thenReturn(accept);
-	}
-
-	public void mockGenReturnsForState(GenerationState state, String toReturn){
-		when(mockGen.generate(state)).thenReturn(toReturn);
-	}
-
-	public GenerationState mockGenerationStateThatAcceptsAnything(){
-		State mockState = mock(State.class);
-		GenerationState g = new GenerationState(mockState);
-		when(mockState.step(anyChar())).thenReturn(mockState);
-		return g;
-	}
-
 
 
 
