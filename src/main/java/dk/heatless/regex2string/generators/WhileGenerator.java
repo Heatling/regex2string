@@ -49,8 +49,9 @@ public class WhileGenerator implements Generator {
 		this.doGenerate = doGenerate;
 	}
 	
+//methods
 	@Override
-	public String generate(GenerationState state) {
+	public GenerationState generate(GenerationState state) {
 		GenerationState mark = state, prev = state, next = state;
 		while(condition.accept(prev)){
 			next = prev.apply(doGenerate);
@@ -61,6 +62,6 @@ public class WhileGenerator implements Generator {
 			}
 		}
 		
-		return (prev == mark)? null : prev.getGenerated(mark);
+		return (prev == mark)? null : prev;
 	}
 }

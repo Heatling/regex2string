@@ -44,7 +44,7 @@ public class SequentialGeneratorTest {
 		GenerationState genState = TestUtilities.getGenerationStateFor("Yes");
 		SequentialGenerator g = new SequentialGenerator(new Generator[]{mockG});
 		
-		assertEquals(g.generate(genState), "Yes");
+		assertEquals(g.generate(genState).getGenerated(), "Yes");
 		
 	}
 
@@ -73,7 +73,7 @@ public class SequentialGeneratorTest {
 		
 		SequentialGenerator g = new SequentialGenerator(new Generator[]{mockG1, mockG2});
 		
-		assertEquals(g.generate(genState), "1Yes12Yes2");
+		assertEquals(g.generate(genState).getGenerated(), "1Yes12Yes2");
 	}
 	
 	@Test
@@ -121,6 +121,6 @@ public class SequentialGeneratorTest {
 		
 		SequentialGenerator g = new SequentialGenerator(new Generator[]{mockG1, mockG2, mockG3, mockG4, mockG5});
 		
-		assertEquals(g.generate(genState), "1Yes12Yes23Yes34Yes45Yes5");
+		assertEquals(g.generate(genState).getGenerated(), "1Yes12Yes23Yes34Yes45Yes5");
 	}
 }

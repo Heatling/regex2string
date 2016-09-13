@@ -17,7 +17,7 @@ import dk.heatless.regex2string.generators.ConditionalGenerator;
 import dk.heatless.regex2string.generators.DynamicStringGenerator;
 import dk.heatless.regex2string.generators.MinimalDigitGenerator;
 import dk.heatless.regex2string.generators.RepeatGenerator;
-import dk.heatless.regex2string.generators.RuleSetGenerator;
+import dk.heatless.regex2string.generators.SetGenerator;
 import dk.heatless.regex2string.generators.SequentialGenerator;
 import dk.heatless.regex2string.generators.StaticStringGenerator;
 import dk.heatless.regex2string.generators.WhileGenerator;
@@ -42,7 +42,7 @@ public class Features {
 	
 	@Test
 	public void t2(){
-		RuleSetGenerator rules = new RuleSetGenerator();
+		SetGenerator rules = new SetGenerator();
 		rules.add(new PrefixRule(new StaticStringGenerator("{")));
 		rules.add(new PostfixRule(new StaticStringGenerator("}")));
 		rules.add(new Rule(Conditions.NO_CONDITION, Conditions.NO_CONDITION, new StaticStringGenerator("something")));
@@ -65,7 +65,7 @@ public class Features {
 	
 	@Test
 	public void t4(){
-		RuleSetGenerator rules = new RuleSetGenerator();
+		SetGenerator rules = new SetGenerator();
 		rules.add(new PrefixRule(new StaticStringGenerator("-")));
 		rules.add(new PostfixRule(new StaticStringGenerator("23")));
 		PriorityGenerator pG = new PriorityGenerator(Conditions.NO_CONDITION, rules, new MinimalDigitGenerator());
@@ -77,7 +77,7 @@ public class Features {
 	
 	@Test
 	public void t5(){
-		RuleSetGenerator rules = new RuleSetGenerator();
+		SetGenerator rules = new SetGenerator();
 		rules.add(new PrefixRule(new StaticStringGenerator("-")));
 		
 		DynamicStringGenerator insert = new DynamicStringGenerator();

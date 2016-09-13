@@ -31,12 +31,13 @@ public class SequentialGenerator implements Generator {
 		this.sequence = sequence;
 	}
 	
+//Methods
 	/**
 	 * To return a non-{@code null} result, the first generator must be applicable
 	 * to the given state. The second generator must then be applicable to the resulting state, and so on.
 	 */
 	@Override
-	public String generate(GenerationState state) {
+	public GenerationState generate(GenerationState state) {
 		GenerationState mark = state;
 		GenerationState next = state;
 		for(int i = 0; i<sequence.length; i++){
@@ -44,9 +45,8 @@ public class SequentialGenerator implements Generator {
 			if(next == null){
 				return null;
 			}
-			System.out.println("'" + next.getGenerated(mark)+"'");
 		}
-		return (next == mark)? null: next.getGenerated(mark);
+		return (next == mark)? null: next;
 	}
 
 }

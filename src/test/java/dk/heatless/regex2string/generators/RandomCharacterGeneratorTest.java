@@ -42,7 +42,7 @@ public class RandomCharacterGeneratorTest {
 		when(mockRandom.nextInt('9'-'0')).thenReturn(3);
 		
 		genState = TestUtilities.getGenerationStateFor("[0-9]");
-		assertEquals(g.generate(genState), "3");
+		assertEquals(g.generate(genState).getGenerated(), "3");
 	}
 	
 	@Test
@@ -54,6 +54,6 @@ public class RandomCharacterGeneratorTest {
 		when(mockRandom.nextInt(1)).thenReturn(0);
 		
 		genState = TestUtilities.getGenerationStateFor("0");
-		assertEquals(g.generate(genState), "0");
+		assertEquals(g.generate(genState).getGenerated(), "0");
 	}
 }

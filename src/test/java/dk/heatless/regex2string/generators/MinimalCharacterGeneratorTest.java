@@ -21,7 +21,7 @@ public class MinimalCharacterGeneratorTest {
 		 * Test that if the state accepts 1 sequence, the minimum is returned.
 		 */
 		genState = TestUtilities.getGenerationStateFor("[a-z]");
-		String result = g.generate(genState);
+		String result = g.generate(genState).getGenerated();
 		
 		assertEquals(result, "a");
 	}
@@ -33,7 +33,7 @@ public class MinimalCharacterGeneratorTest {
 		 */
 		genState = TestUtilities.getGenerationStateFor("([B-R]|[a-c])");
 		
-		String result = g.generate(genState);
+		String result = g.generate(genState).getGenerated();
 		
 		assertEquals(result, "B");
 	}
