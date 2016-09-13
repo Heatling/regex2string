@@ -149,14 +149,19 @@ public class GenerationStateTest {
 	@Test
 	public void stepStringNull(){
 		/*
-		 * Test that step(String) does not accept null
+		 * Test that step(String) returns null if given null
 		 */
-		try{
-			new GenerationState(mockState).step(null);
-			fail("Should throw IllegalArgumentException");
-		}catch(IllegalArgumentException err){
-			assertEquals(err.getMessage(), "String was null");
-		}
+		
+		assertEquals(new GenerationState(mockState).step(null), null);
+	}
+	
+	@Test
+	public void stepStringEmpty(){
+		/*
+		 * Test that step(String) returns null if given an empty string
+		 */
+		
+		assertEquals(new GenerationState(mockState).step(""), null);
 	}
 	
 	@Test
@@ -224,9 +229,27 @@ public class GenerationStateTest {
 		assertEquals(currentState.getLengthOfGenerated(), text.length());
 	}
 	
+	@Test
+	public void stepCharCorrect(){
+		/*
+		 * Test that step(char) returns the correct generation state if the 
+		 * char is valid
+		 */
+		GenerationState start = TestUtilities.getGenerationStateFor("a");
+		
+		assertEquals(start.step('a').getGenerated(), "a");
+	}
 
-
-
+	@Test
+	public void stepCharWrong(){
+		/*
+		 * Test that step(char) returns the null if the 
+		 * char is invalid
+		 */
+		GenerationState start = TestUtilities.getGenerationStateFor("a");
+		
+		assertEquals(start.step('b'), null);
+	}
 
 
 

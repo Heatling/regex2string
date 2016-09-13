@@ -53,7 +53,7 @@ public class ConditionalGeneratorTest {
 		Condition trueC = TestUtilities.getConditionAccepting(mockGenState);
 		
 		ConditionalGenerator ConGen = new ConditionalGenerator(trueC, a, b);
-		assertEquals(ConGen.generate(mockGenState), "aGa");
+		assertEquals(ConGen.generate(mockGenState).getGenerated(), "aGa");
 	}
 	
 	@Test
@@ -69,7 +69,7 @@ public class ConditionalGeneratorTest {
 		Condition falseC = TestUtilities.getConditionAcceptingAnythingBut(mockGenState);
 		
 		ConditionalGenerator ConGen = new ConditionalGenerator(falseC, a, b);
-		assertEquals(ConGen.generate(mockGenState), "bGb");
+		assertEquals(ConGen.generate(mockGenState).getGenerated(), "bGb");
 	}
 	
 }

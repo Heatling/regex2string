@@ -28,7 +28,7 @@ public class ConditionalGenerator implements Generator{
 	
 //Methods
 	@Override
-	public String generate(GenerationState state){
+	public GenerationState generate(GenerationState state){
 		return (condition.accept(state))? a.generate(state): b.generate(state);
 	}
 

@@ -34,7 +34,7 @@ public class DynamicStringGeneratorTest {
 		g.setToGenerate("Correct");
 		GenerationState mockGenStateStart = TestUtilities.getGenerationStateAcceptingAnything();
 		
-		assertEquals(g.generate(mockGenStateStart), "Correct");
+		assertEquals(g.generate(mockGenStateStart).getGenerated(), "Correct");
 	}
 	
 	@Test
